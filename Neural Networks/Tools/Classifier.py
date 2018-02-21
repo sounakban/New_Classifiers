@@ -57,7 +57,7 @@ class CNN_Classifier:
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
         model = Model(model_input, model_output)
-        optimizer = Adam(lr=0.0001)
+        optimizer = Adam(lr=0.001)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
