@@ -96,7 +96,7 @@ train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_
 from Tools.Classifier import CNN_Classifier
 
 # classifier = CNN_Classifier(filter_sizes=[3,5,7], filter_counts=[150,200,300], pool_windows=[8,15,14], learning_rate=0.01, batch_size=64, num_epochs=10)
-classifier = CNN_Classifier(filter_sizes=[7], filter_counts=[300], pool_windows=[14], learning_rate=0.01, batch_size=64, num_epochs=10)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,14], learning_rate=0.01, batch_size=64, num_epochs=10)
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
