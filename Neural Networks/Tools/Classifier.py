@@ -64,9 +64,9 @@ class CNN_Classifier:
         print(type(x_train), " ; ", type(y_train))
         print(x_train.shape, ' ; ', x_test.shape)
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-        #   validation_data=(x_test, y_test), verbose=2)
+        #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
         model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-          validation_split=0.2, verbose=2)
+          validation_split=0.2, verbose=2, shuffle=True)
 
         return 0
