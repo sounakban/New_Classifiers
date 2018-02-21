@@ -4,7 +4,7 @@
 
 class CNN_Classifier:
 
-    def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.01, batch_size=64, num_epochs=10):
+    def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
         self.filter_sizes = filter_sizes
@@ -12,6 +12,7 @@ class CNN_Classifier:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.pool_windows = pool_windows
+        self.learning_rate = learning_rate
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
@@ -57,7 +58,7 @@ class CNN_Classifier:
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
         model = Model(model_input, model_output)
-        optimizer = Adam(lr=0.001)
+        optimizer = Adam(lr=self.learning_rate)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
