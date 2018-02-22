@@ -36,7 +36,7 @@ class CNN_Classifier:
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
-        # model_embedding = Dropout(0.4)(model_embedding)
+        model_embedding = Dropout(0.4)(model_embedding)
         conv_blocks = []
         for i in range(len(self.filter_sizes)):
             conv = Convolution1D(filters=self.filter_counts[i],
