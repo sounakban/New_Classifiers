@@ -111,25 +111,7 @@ class RNN_Classifier:
         # model_embedding = Dropout(0.4)(model_embedding)
         model_recurrent  = LSTM(embeddings.shape[1], dropout=0.2, recurrent_dropout=0.2)(model_embedding)
 
-
-
-
-
-        # conv_blocks = []
-        # for i in range(len(self.filter_sizes)):
-        #     conv = Convolution1D(filters=self.filter_counts[i],
-        #                          kernel_size=self.filter_sizes[i],
-        #                          padding="valid",
-        #                          activation="relu",
-        #                          use_bias=False,
-        #                          strides=1)(model_embedding)
-        #     conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
-        #     conv = Flatten()(conv)
-        #     conv_blocks.append(conv)
-        # model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
-
-        model_hidden = Dropout(0.3)(model_recurrent)
-        model_hidden = Dense(1024, activation="relu")(model_hidden)
+        model_hidden = Dense(1024, activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(256, activation="relu")(model_hidden)
         model_hidden = Dropout(0.2)(model_hidden)
