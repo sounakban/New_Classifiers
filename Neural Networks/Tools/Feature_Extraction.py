@@ -26,7 +26,8 @@ def chisqure(train_docs, train_labels, feature_count = 500):
 	train_docs_vectorized, index2vocabulary_dict, ignored_words = vectorize_tfidf(train_docs)
 
 	if feature_count == 0:
-		feature_count = train_docs_vectorized.shape[1]
+		# feature_count = train_docs_vectorized.shape[1]
+		return index2vocabulary_dict.values()
 
 	from sklearn.feature_selection import SelectKBest, chi2
 	feature_selector = SelectKBest(chi2, k=feature_count)
