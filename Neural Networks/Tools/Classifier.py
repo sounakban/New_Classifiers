@@ -26,7 +26,7 @@ class CNN_Classifier:
         from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding
         from keras.layers.merge import Concatenate
         from keras.preprocessing import sequence
-        from keras.optimizers import Adam
+        from keras.optimizers import Adam, Adagrad
         np.random.seed(123456)
 
         # input_shape = (sequence_length, embeddings.shape[1])
@@ -36,7 +36,7 @@ class CNN_Classifier:
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
-        model_embedding = Dropout(0.4)(model_embedding)
+        # model_embedding = Dropout(0.4)(model_embedding)
         conv_blocks = []
         for i in range(len(self.filter_sizes)):
             conv = Convolution1D(filters=self.filter_counts[i],
@@ -60,8 +60,9 @@ class CNN_Classifier:
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
         model = Model(model_input, model_output)
-        optimizer = Adam(lr=self.learning_rate)
-        model.compile(loss="categorical_crossentropy", optimizer="sgd", metrics=["accuracy"])
+        # optimizer = Adam(lr=self.learning_rate)
+        optimizer = Adagrad(lr=self.learning_rate)
+        model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
         print(type(x_train), " ; ", type(y_train))
