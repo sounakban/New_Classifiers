@@ -22,10 +22,9 @@ class CNN_Classifier:
         assert type(x_train) == req_type and type(x_test) == req_type
         assert type(y_train) == req_type and type(y_test) == req_type
 
-        from keras.models import Sequential, Model
+        from keras.models import Model
         from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding
         from keras.layers.merge import Concatenate
-        from keras.preprocessing import sequence
         from keras.optimizers import Adam, Adagrad
         np.random.seed(123456)
 
@@ -85,11 +84,9 @@ class RNN_Classifier:
     def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
-        self.filter_sizes = filter_sizes
-        self.filter_counts = filter_counts
+        self.output_size = output_size
         self.batch_size = batch_size
         self.num_epochs = num_epochs
-        self.pool_windows = pool_windows
         self.learning_rate = learning_rate
 
 
@@ -100,10 +97,9 @@ class RNN_Classifier:
         assert type(x_train) == req_type and type(x_test) == req_type
         assert type(y_train) == req_type and type(y_test) == req_type
 
-        from keras.models import Sequential, Model
-        from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding
+        from keras.models import Model
+        from keras.layers import Input, Dense, Dropout, Flatten, Embedding
         from keras.layers.merge import Concatenate
-        from keras.preprocessing import sequence
         from keras.optimizers import Adam
         np.random.seed(123456)
 
@@ -114,21 +110,27 @@ class RNN_Classifier:
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
-        model_embedding = Dropout(0.4)(model_embedding)
-        conv_blocks = []
-        for i in range(len(self.filter_sizes)):
-            conv = Convolution1D(filters=self.filter_counts[i],
-                                 kernel_size=self.filter_sizes[i],
-                                 padding="valid",
-                                 activation="relu",
-                                 use_bias=False,
-                                 strides=1)(model_embedding)
-            conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
-            conv = Flatten()(conv)
-            conv_blocks.append(conv)
-        model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
+        # model_embedding = Dropout(0.4)(model_embedding)
+        model_recurrent  = LSTM(embeddings.shape[1], dropout=0.2, recurrent_dropout=0.2)(model_embedding)
 
-        model_hidden = Dropout(0.3)(model_conv)
+
+
+
+
+        # conv_blocks = []
+        # for i in range(len(self.filter_sizes)):
+        #     conv = Convolution1D(filters=self.filter_counts[i],
+        #                          kernel_size=self.filter_sizes[i],
+        #                          padding="valid",
+        #                          activation="relu",
+        #                          use_bias=False,
+        #                          strides=1)(model_embedding)
+        #     conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
+        #     conv = Flatten()(conv)
+        #     conv_blocks.append(conv)
+        # model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
+
+        model_hidden = Dropout(0.3)(model_recurrent)
         model_hidden = Dense(1024, activation="relu")(model_hidden)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(256, activation="relu")(model_hidden)

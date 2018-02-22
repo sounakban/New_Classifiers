@@ -93,10 +93,10 @@ train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_
 
 #-------------------------------------------Classification-------------------------------------------
 
-from Tools.Classifier import CNN_Classifier
+from Tools.Classifier import CNN_Classifier, RNN_Classifier
 
-# classifier = CNN_Classifier(filter_sizes=[3,5,7], filter_counts=[150,200,300], pool_windows=[12,15,14], learning_rate=0.01, batch_size=64, num_epochs=10)
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
+# classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
+classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=32, num_epochs=50)
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
