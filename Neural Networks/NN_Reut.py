@@ -85,7 +85,7 @@ test_labels = mlb.transform([reuters.categories(doc_id) for doc_id in test_docs_
 
 ## Process Dataset ##
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(train_docs, train_labels, feature_count = 5000)
+selected_terms = chisqure(train_docs, train_labels, feature_count = 0)
 # print(len(train_docs), " ; ", len(test_docs))
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(dataset, train_docs, test_docs, selected_terms)
 
