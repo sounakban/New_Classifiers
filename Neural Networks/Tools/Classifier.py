@@ -82,8 +82,6 @@ class CNN_Classifier:
 class RNN_Classifier:
 
     def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
-        assert len(filter_sizes) == len(filter_counts)
-        assert len(filter_sizes) == len(pool_windows)
         self.output_size = output_size
         self.batch_size = batch_size
         self.num_epochs = num_epochs
