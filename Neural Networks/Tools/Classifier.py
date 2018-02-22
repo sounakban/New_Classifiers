@@ -109,7 +109,7 @@ class RNN_Classifier:
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
         # model_embedding = Dropout(0.4)(model_embedding)
-        model_recurrent  = LSTM(embeddings.shape[1]*1.5, activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
+        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
 
         model_hidden = Dense(512, activation="relu")(model_recurrent)
