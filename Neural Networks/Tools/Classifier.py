@@ -96,7 +96,7 @@ class RNN_Classifier:
         assert type(y_train) == req_type and type(y_test) == req_type
 
         from keras.models import Model
-        from keras.layers import Input, Dense, Dropout, Flatten, Embedding
+        from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam
         np.random.seed(123456)
