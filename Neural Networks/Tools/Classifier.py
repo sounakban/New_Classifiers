@@ -27,7 +27,7 @@ class CNN_Classifier:
         from keras.layers.merge import Concatenate
         from keras.preprocessing import sequence
         from keras.optimizers import Adam
-        # np.random.seed(100)
+        np.random.seed(123456)
 
         # input_shape = (sequence_length, embeddings.shape[1])
         input_shape = (sequence_length,)
