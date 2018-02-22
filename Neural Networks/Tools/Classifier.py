@@ -51,7 +51,7 @@ class CNN_Classifier:
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.3)(model_conv)
-        model_hidden = Dense(1024, activation="relu")(model_hidden)
+        model_hidden = Dense(2048, activation="relu")(model_hidden)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
