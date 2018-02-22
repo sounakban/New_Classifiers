@@ -27,7 +27,7 @@ class CNN_Classifier:
         from keras.layers.merge import Concatenate
         from keras.preprocessing import sequence
         from keras.optimizers import Adam
-        np.random.seed(100)
+        # np.random.seed(100)
 
         # input_shape = (sequence_length, embeddings.shape[1])
         input_shape = (sequence_length,)
@@ -53,7 +53,7 @@ class CNN_Classifier:
         model_hidden = Dropout(0.3)(model_conv)
         model_hidden = Dense(1024, activation="relu")(model_hidden)
         model_hidden = Dropout(0.5)(model_hidden)
-        model_hidden = Dense(62, activation="relu")(model_hidden)
+        model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
