@@ -84,6 +84,8 @@ train_labels = mlb.fit_transform([reuters.categories(doc_id) for doc_id in train
 test_labels = mlb.transform([reuters.categories(doc_id) for doc_id in test_docs_id])
 
 ## Process Dataset ##
+from Tools import Utils
+train_docs, test_docs = Utils.preprocess(train_docs, test_docs)
 from Tools.Feature_Extraction import chisqure
 selected_terms = chisqure(train_docs, train_labels, feature_count = 0)
 # print(len(train_docs), " ; ", len(test_docs))
