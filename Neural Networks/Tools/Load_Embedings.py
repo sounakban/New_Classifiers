@@ -23,8 +23,8 @@ class Get_Embeddings:
 
 	def googleVecs(self, corpus, selected_terms = set()):
 
-		# from nltk.tokenize import RegexpTokenizer
-		# tokenizer = RegexpTokenizer(r'\w+')
+		from nltk.tokenize import RegexpTokenizer
+		tokenizer = RegexpTokenizer(r'\w+')
 		# from nltk.stem import WordNetLemmatizer
 		# wordnet_lemmatizer = WordNetLemmatizer()
 		# from nltk.corpus import stopwords
