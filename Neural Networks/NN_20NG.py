@@ -50,7 +50,7 @@ print("Total Doc Count : ", len(train_docs)+len(test_docs))
 from sklearn.preprocessing import LabelBinarizer
 lb = LabelBinarizer()
 train_labels = lb.fit_transform(train_labels)
-print(train_labels.shape)
+print("Label dimention : ", train_labels.shape)
 test_labels = lb.transform(test_labels)
 
 ## Process Dataset ##
@@ -73,37 +73,6 @@ new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(tes
 
 
 
-
-# from sklearn.multiclass import OneVsRestClassifier
-#
-# """
-# from sklearn.naive_bayes import GaussianNB
-# classifier = OneVsRestClassifier(GaussianNB())
-# #"""
-# """
-# from sklearn.svm import LinearSVC
-# #classifier = OneVsRestClassifier(LinearSVC(tol=0.001, C=3.5, random_state=42))
-# classifier = OneVsRestClassifier(LinearSVC(random_state=42))
-# #"""
-# """
-# from sklearn.naive_bayes import MultinomialNB
-# classifier = OneVsRestClassifier(MultinomialNB(alpha=.01))
-# #"""
-# """
-# from sklearn.naive_bayes import MultinomialNB
-# classifier = OneVsRestClassifier(MultinomialNB())
-# #"""
-# #"""
-# from sklearn.neighbors import KNeighborsClassifier
-# classifier = OneVsRestClassifier(KNeighborsClassifier(n_neighbors=15, n_jobs=-2))
-# #"""
-#
-#
-# classifier.fit(vectorised_train_documents, train_labels)
-#
-# predictions = classifier.predict(vectorised_test_documents)
-#
-#
 # #-------------------------------------------Evaluation-------------------------------------------
 #
 # from sklearn.metrics import f1_score, precision_score, recall_score

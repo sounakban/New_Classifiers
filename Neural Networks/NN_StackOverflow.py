@@ -1,36 +1,31 @@
-train_cut = 0.8
+import numpy as np
 
 #-------------------------------------------Functions-------------------------------------------
 
 def get_Embeddings(data=[], selected_terms = set()):
-    import os
-    import pickle
+	import os
+	import pickle
 
-    fileName = "saveFiles/StkOvf_Embeddings.pkl"
-    if os.path.exists(fileName):
-        with open(fileName, 'rb') as temp:
-            data_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
-    else:
-        all_docs = list(data)
+	fileName = "saveFiles/StkOvf_Embeddings.pkl"
+	if os.path.exists(fileName):
+		with open(fileName, 'rb') as temp:
+			data_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
+	else:
+		all_docs = list(data)
 
-        # Get Embeddings
-        from Tools.Load_Embedings import Get_Embeddings
-        embeddingGenerator = Get_Embeddings()
-        data_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
-        del embeddingGenerator
+		# Get Embeddings
+		from Tools.Load_Embedings import Get_Embeddings
+		embeddingGenerator = Get_Embeddings()
+		data_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
+		del embeddingGenerator
 		from keras.preprocessing.sequence import pad_sequences
 		data_vectors = pad_sequences(data_vectors, maxlen=maxSize, padding='post', value=0.)
 
-        with open(fileName, 'wb') as temp:
-            pickle.dump((data_vectors, embeddings, maxSize, embedding_vocab), temp)
+		with open(fileName, 'wb') as temp:
+			pickle.dump((data_vectors, embeddings, maxSize, embedding_vocab), temp)
 
 	print("Embeddings Shape : ",embeddings.shape)
 	return (data_vectors, embeddings, maxSize, embedding_vocab)
-
-
-
-
-
 
 
 #-------------------------------------------Prepare Data-------------------------------------------
@@ -42,18 +37,36 @@ SOvrflow = getStackOverflow("/Volumes/Files/Work/Research/Information Retrieval/
 data = SOvrflow.getData()
 labels = SOvrflow.getTarget()
 
-## Process Dataset ##
-data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data)
+## Binarize Labels ##
+from sklearn.preprocessing import LabelBinarizer
+lb = LabelBinarizer()
+labels = lb.fit_transform(labels)
+print("Label dimention : ", labels.shape)
 
+from Tools.Feature_Extraction import chisqure
+selected_terms = chisqure(data, labels, feature_count = 0)
+
+## Process Dataset ##
+data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
+
+
+#-------------------------------------------Classification-------------------------------------------
 
 totrec = 0.0
 totprec = 0.0
 totF1 = 0.0
-K = 10
-set_size = len(data)/K
 
+from sklearn.model_selection import KFold
+kf = KFold(n_splits=10)
+from Tools.Classifier import CNN_Classifier, RNN_Classifier
 
+for train_indices, test_indices in kf.split(data_vectors):
+	train_doc_vectors, train_labels = [data_vectors[i] for i in train_indices], labels[train_indices]  #[labels[i] for i in train_indices]
+	test_doc_vectors, test_labels = [data_vectors[i] for i in test_indices], labels[test_indices]  #[labels[i] for i in test_indices]
 
+	classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
+	# classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
+	new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
 # for i in range(K):

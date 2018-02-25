@@ -81,6 +81,7 @@ test_docs = [reuters.raw(doc_id) for doc_id in test_docs_id]
 from sklearn.preprocessing import MultiLabelBinarizer
 mlb = MultiLabelBinarizer()
 train_labels = mlb.fit_transform([reuters.categories(doc_id) for doc_id in train_docs_id])
+print("Label dimention : ", train_labels.shape)
 test_labels = mlb.transform([reuters.categories(doc_id) for doc_id in test_docs_id])
 
 ## Process Dataset ##
