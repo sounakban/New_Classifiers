@@ -1,27 +1,32 @@
 #-------------------------------------------Functions-------------------------------------------
 
-def get_Embeddings(train_docs=[], test_docs=[]):
-    import os
-    import pickle
+def get_Embeddings(train_docs=[], test_docs=[], selected_terms = set()):
+	import os
+	import pickle
 
-    fileName = "saveFiles/20NG_Embeddings.pkl"
-    if os.path.exists(fileName):
-        with open(fileName, 'rb') as temp:
-            train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
-    else:
-        all_docs = train_docs
-        all_docs.extend(test_docs)
+	fileName = "saveFiles/20NG_Embeddings.pkl"
+	if os.path.exists(fileName):
+		with open(fileName, 'rb') as temp:
+			train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
+	else:
+		all_docs = list(train_docs)
+		all_docs.extend(test_docs)
 
-        # Get Embeddings
-        from Tools.Load_Embedings import Get_Embeddings
-        embeddingGenerator = Get_Embeddings()
-        doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs)
-        del embeddingGenerator
-        train_doc_vectors = doc_vectors[:len(train_docs)]
-        test_doc_vectors = doc_vectors[len(train_docs):]
+		# Get Embeddings
+		from Tools.Load_Embedings import Get_Embeddings
+		embeddingGenerator = Get_Embeddings()
+		doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
+		del embeddingGenerator
+		from keras.preprocessing.sequence import pad_sequences
+		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
+		train_doc_vectors = doc_vectors[:len(train_docs)]
+		test_doc_vectors = doc_vectors[len(train_docs):]
 
-        with open(fileName, 'wb') as temp:
-            pickle.dump((train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab), temp)
+		with open(fileName, 'wb') as temp:
+			pickle.dump((train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab), temp)
+
+	print("Embeddings Shape : ",embeddings.shape)
+	return (train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab)
 
 
 
@@ -40,7 +45,12 @@ test_labels = fetch_20newsgroups(subset='test').target
 print("Total Doc Count : ", len(train_docs)+len(test_docs))
 
 ## Process Dataset ##
-train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs)
+from Tools import Utils
+train_docs, test_docs = Utils.preprocess(train_docs, test_docs)
+from Tools.Feature_Extraction import chisqure
+selected_terms = chisqure(train_docs, train_labels, feature_count = 0)
+# print(len(train_docs), " ; ", len(test_docs))
+train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs, selected_terms)
 
 
 

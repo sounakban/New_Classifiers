@@ -2,7 +2,7 @@ train_cut = 0.8
 
 #-------------------------------------------Functions-------------------------------------------
 
-def get_Embeddings(data=[]):
+def get_Embeddings(data=[], selected_terms = set()):
     import os
     import pickle
 
@@ -11,16 +11,21 @@ def get_Embeddings(data=[]):
         with open(fileName, 'rb') as temp:
             data_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
     else:
-        all_docs = data
+        all_docs = list(data)
 
         # Get Embeddings
         from Tools.Load_Embedings import Get_Embeddings
         embeddingGenerator = Get_Embeddings()
-        data_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs)
+        data_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
         del embeddingGenerator
+		from keras.preprocessing.sequence import pad_sequences
+		data_vectors = pad_sequences(data_vectors, maxlen=maxSize, padding='post', value=0.)
 
         with open(fileName, 'wb') as temp:
             pickle.dump((data_vectors, embeddings, maxSize, embedding_vocab), temp)
+
+	print("Embeddings Shape : ",embeddings.shape)
+	return (data_vectors, embeddings, maxSize, embedding_vocab)
 
 
 

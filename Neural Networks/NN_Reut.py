@@ -21,10 +21,10 @@ def get_Embeddings(dataset, train_docs=[], test_docs=[], selected_terms = set())
 
 		# Get Embeddings
 		from Tools.Load_Embedings import Get_Embeddings
-		from keras.preprocessing.sequence import pad_sequences
 		embeddingGenerator = Get_Embeddings()
 		doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
 		del embeddingGenerator
+		from keras.preprocessing.sequence import pad_sequences
 		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
 		train_doc_vectors = doc_vectors[:len(train_docs)]
 		test_doc_vectors = doc_vectors[len(train_docs):]
@@ -39,7 +39,7 @@ def get_Embeddings(dataset, train_docs=[], test_docs=[], selected_terms = set())
 
 ## List of document ids ##
 
-def getDocIDs_90():
+def getDocIDs_top10():
 	# Top 10 Categories
 	documents = [f for f in reuters.fileids() if len(reuters.categories(fileids=f))==1]
 	train_docs_id = list(filter(lambda doc: doc.startswith("train") and len(reuters.raw(doc))>51, documents))
@@ -57,7 +57,7 @@ def getDocIDs_90():
 	return (train_docs_id, test_docs_id)
 
 
-def getDocIDs_top10():
+def getDocIDs_90():
 	# 90 Categories
 	documents = reuters.fileids()
 	train_docs_id = list(filter(lambda doc: doc.startswith("train") and len(reuters.raw(doc))>51, documents))
@@ -102,35 +102,6 @@ classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, 
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
-
-# from sklearn.multiclass import OneVsRestClassifier
-#
-# """
-# from sklearn.naive_bayes import BernoulliNB
-# classifier = OneVsRestClassifier(BernoulliNB(alpha=0.01))
-# #"""
-# """
-# from sklearn.naive_bayes import MultinomialNB
-# classifier = OneVsRestClassifier(MultinomialNB(alpha=0.01))
-# #"""
-# #"""
-# from sklearn.naive_bayes import MultinomialNB
-# classifier = OneVsRestClassifier(MultinomialNB())
-# #"""
-# """
-# from sklearn.neighbors import KNeighborsClassifier
-# classifier = OneVsRestClassifier(KNeighborsClassifier(n_neighbors=15, n_jobs=-2))
-# #"""
-# """
-# from sklearn.svm import LinearSVC
-# classifier = OneVsRestClassifier(LinearSVC(random_state=42))
-# #"""
-#
-#
-# classifier.fit(vectorised_train_documents, train_labels)
-# predictions = classifier.predict(vectorised_test_documents)
-#
-#
 # #-------------------------------------------Evaluation-------------------------------------------
 #
 # from sklearn.metrics import f1_score, precision_score, recall_score

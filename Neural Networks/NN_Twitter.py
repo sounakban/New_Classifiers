@@ -2,7 +2,7 @@ train_cut = 0.8
 
 #-------------------------------------------Functions-------------------------------------------
 
-def get_Embeddings(postweet=[], negtweet=[]):
+def get_Embeddings(postweet=[], negtweet=[], selected_terms = set()):
     import os
     import pickle
 
@@ -11,19 +11,24 @@ def get_Embeddings(postweet=[], negtweet=[]):
         with open(fileName, 'rb') as temp:
             postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
     else:
-        all_docs = postweet
+        all_docs = list(postweet)
         all_docs.extend(negtweet)
 
         # Get Embeddings
         from Tools.Load_Embedings import Get_Embeddings
         embeddingGenerator = Get_Embeddings()
-        doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs)
+        doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
         del embeddingGenerator
+		from keras.preprocessing.sequence import pad_sequences
+		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
         postweet_vectors = doc_vectors[:len(postweet)]
         negtweet_vectors = doc_vectors[len(postweet):]
 
         with open(fileName, 'wb') as temp:
             pickle.dump((postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab), temp)
+
+	print("Embeddings Shape : ",embeddings.shape)
+	return (postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab)
 
 
 
