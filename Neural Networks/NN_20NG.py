@@ -46,6 +46,13 @@ test_docs = fetch_20newsgroups(subset='test').data
 test_labels = fetch_20newsgroups(subset='test').target
 print("Total Doc Count : ", len(train_docs)+len(test_docs))
 
+## Binarize Labels ##
+from sklearn.preprocessing import LabelBinarizer
+lb = LabelBinarizer()
+train_labels = lb.fit_transform(train_labels)
+print(train_labels.shape)
+test_labels = lb.transform(test_labels)
+
 ## Process Dataset ##
 from Tools import Utils
 train_docs, test_docs = Utils.preprocess(train_docs, test_docs)
@@ -53,8 +60,6 @@ from Tools.Feature_Extraction import chisqure
 selected_terms = chisqure(train_docs, train_labels, feature_count = 0)
 # print(len(train_docs), " ; ", len(test_docs))
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs, selected_terms)
-
-
 
 
 
