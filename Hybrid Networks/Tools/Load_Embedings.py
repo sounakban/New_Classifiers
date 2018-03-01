@@ -6,8 +6,8 @@ class Get_Embeddings:
 
 	def __init__(self):
 		import gensim
-		# self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('/Volumes/Files/Work/Research/Information Retrieval/General Tools/GoogleNews-vectors-negative300.bin', binary=True)
-		self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('./../../Resources/GoogleNews-vectors-negative300.bin', binary=True)
+		self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('/Volumes/Files/Work/Research/Information Retrieval/General Tools/GoogleNews-vectors-negative300.bin', binary=True)
+		# self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('./../../Resources/GoogleNews-vectors-negative300.bin', binary=True)
 		#List of words in vocabulary
 		self.embedding_vocab = []
 		#Mapping of doc words to embedding table
@@ -29,7 +29,7 @@ class Get_Embeddings:
 		not_in_vocab = 0
 		for doc_num in range(len(corpus)):
 			doc_temp = []
-			for sentence in sent_tokenize(corpus[doc_num])
+			for sentence in sent_tokenize(corpus[doc_num]):
 				tokens = tokenizer.tokenize(sentence)
 				tokens = [word for word in tokens if word in selected_terms]
 
@@ -57,11 +57,11 @@ class Get_Embeddings:
 
 			self.doc_vectors.append(doc_temp)
 
-		print("Load_Embedings :: GoogleVecs_POS_triggerVecs")
+		print("Load_Embedings :: GoogleVecs")
 		print("Num of Docs : ", len(self.doc_vectors))
 		print("Number of unique Words : ", self.num_of_words)
 		print("Words not found in embeddings : ", not_in_vocab)
-		print("Load_Embedings :: GoogleVecs_POS_triggerVecs")
+		print("Load_Embedings :: GoogleVecs")
 
 		del self.google_vecs
 

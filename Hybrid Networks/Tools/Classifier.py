@@ -28,7 +28,6 @@ class CNN_Classifier:
         from keras.optimizers import Adam, Adagrad
         np.random.seed(123456)
 
-        # input_shape = (sequence_length, embeddings.shape[1])
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
@@ -101,7 +100,6 @@ class RNN_Classifier:
         from keras.optimizers import Adam
         np.random.seed(123456)
 
-        # input_shape = (sequence_length, embeddings.shape[1])
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
@@ -160,8 +158,7 @@ class HNN_RR_Classifier:
         from keras.optimizers import Adam
         np.random.seed(123456)
 
-        # input_shape = (sequence_length, embeddings.shape[1])
-        input_shape = (sequence_length,)
+        input_shape = (None, sequence_length)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
