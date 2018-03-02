@@ -145,7 +145,7 @@ class HNN_RR_Classifier:
         self.learning_rate = learning_rate
 
 
-    def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+    def predict(self, x_train, y_train, x_test, y_test, embeddings, dim2_length, dim3_length, class_count):
         import numpy as np
 
         req_type = type(np.array([]))
@@ -158,10 +158,9 @@ class HNN_RR_Classifier:
         from keras.optimizers import Adam
         np.random.seed(123456)
 
-        input_shape = (None, sequence_length)
+        input_shape = (dim2_length, dim3_length)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
-        # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Word Vector (Embeddings) tensor shape: ", model_embedding.get_shape)
         # model_embedding = Dropout(0.4)(model_embedding)

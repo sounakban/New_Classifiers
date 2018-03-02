@@ -18,11 +18,14 @@ class Get_Embeddings:
 		self.embeddings.append(list(np.random.uniform(size=300)))
 		self.num_of_words = 1	#0 is reserved for paddings
 		#Max length of a single sentence
-		self.maxSize = 0
+		self.max_wordCount = 0
+		#Max number of sentences in a single document
+		self.max_sentCount = 0
 
 
 	def googleVecs(self, corpus, selected_terms):
 
+		print("Starting vector and embeddings Generation")
 		from nltk.tokenize import RegexpTokenizer, sent_tokenize
 		tokenizer = RegexpTokenizer(r'\w+')
 
@@ -51,10 +54,12 @@ class Get_Embeddings:
 						self.embeddings.append(list(np.random.uniform(size=300)))
 						self.num_of_words += 1
 
-				if len(sent_temp) > self.maxSize:
-					self.maxSize = len(sent_temp)
+				if len(sent_temp) > self.max_wordCount:
+					self.max_wordCount = len(sent_temp)
 				doc_temp.append(sent_temp)
 
+			if len(doc_temp) > self.max_sentCount:
+				self.max_sentCount = len(doc_temp)
 			self.doc_vectors.append(doc_temp)
 
 		print("Load_Embedings :: GoogleVecs")
@@ -64,5 +69,6 @@ class Get_Embeddings:
 		print("Load_Embedings :: GoogleVecs")
 
 		del self.google_vecs
+		print("Completed vector and embeddings Generation")
 
-		return (self.doc_vectors, np.array(self.embeddings), self.maxSize, self.embedding_vocab)
+		return (self.doc_vectors, np.array(self.embeddings), [self.max_sentCount, self.max_wordCount], self.embedding_vocab)

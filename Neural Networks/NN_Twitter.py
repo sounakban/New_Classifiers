@@ -54,19 +54,20 @@ totprec = 0.0
 totF1 = 0.0
 
 from sklearn.model_selection import KFold
-kf = KFold(n_splits=10)
+kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier
+
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
+# classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):
 	train_doc_vectors, train_labels = [data_vectors[i] for i in train_indices], labels[train_indices]  #[labels[i] for i in train_indices]
 	test_doc_vectors, test_labels = [data_vectors[i] for i in test_indices], labels[test_indices]  #[labels[i] for i in test_indices]
 
-	classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
-	# classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 	new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
-    
+
 
 # for i in range(K):
 #     """

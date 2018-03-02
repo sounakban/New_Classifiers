@@ -24,8 +24,10 @@ def get_Embeddings(dataset, train_docs=[], test_docs=[], selected_terms = set())
 		embeddingGenerator = Get_Embeddings()
 		doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
 		del embeddingGenerator
-		from keras.preprocessing.sequence import pad_sequences
+		# from keras.preprocessing.sequence import pad_sequences
 		# doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
+		from Tools.Utils import pad_sequences3D
+		doc_vectors = pad_sequences3D(doc_vectors, maxSize[0], maxSize[1], value=0)
 		train_doc_vectors = doc_vectors[:len(train_docs)]
 		test_doc_vectors = doc_vectors[len(train_docs):]
 
@@ -91,17 +93,17 @@ from Tools.Feature_Extraction import chisqure
 selected_terms = chisqure(train_docs, train_labels, feature_count = 2000)
 # print(len(train_docs), " ; ", len(test_docs))
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(dataset, train_docs, test_docs, selected_terms)
-print("Doc Vector : ", train_doc_vectors[10])
+# print("Doc Vector : ", train_doc_vectors[10])
 
 
 
 #-------------------------------------------Classification-------------------------------------------
 
-# from Tools.Classifier import CNN_Classifier, RNN_Classifier
-#
-# # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
-# classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-# new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
+from Tools.Classifier import HNN_RR_Classifier
+
+# classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
+classifier = HNN_RR_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
+new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize[0], maxSize[1], train_labels.shape[1])
 
 
 # #-------------------------------------------Evaluation-------------------------------------------
