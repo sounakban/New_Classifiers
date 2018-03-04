@@ -1,7 +1,61 @@
 #####################################
 ## Contains Classification Modules ##
 #####################################
+
+#-----------------------------------Common Functions & Imports-------------------------------------
+
+import numpy as np
 np.random.seed(123456)
+
+def test_model(model, X_test, Y_test):
+    from keras.utils import to_categorical
+    #Get Class of max predicted value
+    predictions = model.predict(X_test).argmax(axis=-1)
+    #Convert to binary category matrix with int type
+    predictions = np.array(to_categorical(predictions), dtype=np.int16)
+
+    from sklearn.metrics import f1_score, precision_score, recall_score
+    test_labels = Y_test
+
+    #MICRO
+    precision = precision_score(test_labels, predictions, average='micro')
+    recall = recall_score(test_labels, predictions, average='micro')
+    f1 = f1_score(test_labels, predictions, average='micro')
+
+    print("Micro-average quality numbers")
+    print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}"
+            .format(precision, recall, f1))
+
+    # totprec += precision
+    # totrec += recall
+    # totF1 += f1
+
+    #MACRO
+    precision = precision_score(test_labels, predictions, average='macro')
+    recall = recall_score(test_labels, predictions, average='macro')
+    f1 = f1_score(test_labels, predictions, average='macro')
+
+    print("Macro-average quality numbers")
+    print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}"
+            .format(precision, recall, f1))
+
+    #INDIVIDUAL
+    precision = precision_score(test_labels, predictions, average=None)
+    recall = recall_score(test_labels, predictions, average=None)
+    f1 = f1_score(test_labels, predictions, average=None)
+
+    print("All-Class quality numbers")
+    print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
+            .format(precision, recall, f1))
+
+    # print "K-fold Micro average:"
+    # print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
+    #         .format(totprec/10, totrec/10, totF1/10))
+
+
+
+
+#-------------------------------------------Main Classes-------------------------------------------
 
 class CNN_Classifier:
 
@@ -17,8 +71,6 @@ class CNN_Classifier:
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
-        import numpy as np
-
         req_type = type(np.array([]))
         assert type(x_train) == req_type and type(x_test) == req_type
         assert type(y_train) == req_type and type(y_test) == req_type
@@ -71,6 +123,8 @@ class CNN_Classifier:
         model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
           validation_split=0.2, verbose=2, shuffle=True)
 
+        test_model(model, x_test, y_test)
+
         return 0
 
 
@@ -88,8 +142,6 @@ class RNN_Classifier:
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
-        import numpy as np
-
         req_type = type(np.array([]))
         assert type(x_train) == req_type and type(x_test) == req_type
         assert type(y_train) == req_type and type(y_test) == req_type
@@ -128,5 +180,7 @@ class RNN_Classifier:
 
         model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
           validation_split=0.2, verbose=2, shuffle=True)
+
+        test_model(model, x_test, y_test)
 
         return 0
