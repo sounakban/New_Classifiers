@@ -60,7 +60,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300,150], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):

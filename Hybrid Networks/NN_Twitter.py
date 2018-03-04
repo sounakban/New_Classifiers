@@ -1,18 +1,17 @@
-train_cut = 0.8
+import numpy as np
 
 #-------------------------------------------Functions-------------------------------------------
 
-def get_Embeddings(postweet=[], negtweet=[], selected_terms = set()):
+def get_Embeddings(data=[], selected_terms = set()):
     import os
     import pickle
 
     fileName = "saveFiles/Twit_Embeddings.pkl"
     if os.path.exists(fileName):
         with open(fileName, 'rb') as temp:
-            postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
+            doc_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
     else:
-        all_docs = list(postweet)
-        all_docs.extend(negtweet)
+        all_docs = list(data)
 
         # Get Embeddings
         from Tools.Load_Embedings import Get_Embeddings
@@ -21,14 +20,12 @@ def get_Embeddings(postweet=[], negtweet=[], selected_terms = set()):
         del embeddingGenerator
 		from keras.preprocessing.sequence import pad_sequences
 		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
-        postweet_vectors = doc_vectors[:len(postweet)]
-        negtweet_vectors = doc_vectors[len(postweet):]
 
         with open(fileName, 'wb') as temp:
-            pickle.dump((postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab), temp)
+            pickle.dump((doc_vectors, embeddings, maxSize, embedding_vocab), temp)
 
 	print("Embeddings Shape : ",embeddings.shape)
-	return (postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab)
+	return (doc_vectors, embeddings, maxSize, embedding_vocab)
 
 
 
@@ -43,9 +40,21 @@ from random import sample
 
 postweet = tweet.strings('positive_tweets.json')
 negtweet = tweet.strings('negative_tweets.json')
+data = list(postweet)
+data.extend(negtweet)
+labels = [[1,0]]*len(postweet)
+labels.extend([[0,1]]*len(negtweet))
+index_shuf = list(range(len(data)))
+shuffle(index_shuf)
+data = [data[i] for i in index_shuf]
+labels = [labels[i] for i in index_shuf]
+labels = np.array(labels)
+
+from Tools.Feature_Extraction import chisqure
+selected_terms = chisqure(data, labels, feature_count = 0)
 
 ## Process Dataset ##
-postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(postweet, negtweet)
+data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
 
 
 
@@ -66,7 +75,7 @@ for train_indices, test_indices in kf.split(data_vectors):
 	new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
-    
+
 
 # for i in range(K):
 #     """

@@ -1,34 +1,31 @@
-train_cut = 0.8
+import numpy as np
 
 #-------------------------------------------Functions-------------------------------------------
 
-def get_Embeddings(postweet=[], negtweet=[], selected_terms = set()):
-    import os
-    import pickle
+def get_Embeddings(data=[], selected_terms = set()):
+	import os
+	import pickle
 
-    fileName = "saveFiles/Twit_Embeddings.pkl"
-    if os.path.exists(fileName):
-        with open(fileName, 'rb') as temp:
-            postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
-    else:
-        all_docs = list(postweet)
-        all_docs.extend(negtweet)
+	fileName = "saveFiles/Twit_Embeddings.pkl"
+	if os.path.exists(fileName):
+		with open(fileName, 'rb') as temp:
+			doc_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
+	else:
+		all_docs = list(data)
 
-        # Get Embeddings
-        from Tools.Load_Embedings import Get_Embeddings
-        embeddingGenerator = Get_Embeddings()
-        doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
-        del embeddingGenerator
+		# Get Embeddings
+		from Tools.Load_Embedings import Get_Embeddings
+		embeddingGenerator = Get_Embeddings()
+		doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
+		del embeddingGenerator
 		from keras.preprocessing.sequence import pad_sequences
 		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
-        postweet_vectors = doc_vectors[:len(postweet)]
-        negtweet_vectors = doc_vectors[len(postweet):]
 
-        with open(fileName, 'wb') as temp:
-            pickle.dump((postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab), temp)
+		with open(fileName, 'wb') as temp:
+			pickle.dump((doc_vectors, embeddings, maxSize, embedding_vocab), temp)
 
 	print("Embeddings Shape : ",embeddings.shape)
-	return (postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab)
+	return (doc_vectors, embeddings, maxSize, embedding_vocab)
 
 
 
@@ -39,13 +36,26 @@ def get_Embeddings(postweet=[], negtweet=[], selected_terms = set()):
 #-------------------------------------------Prepare Data-------------------------------------------
 
 from nltk.corpus import twitter_samples as tweet
-from random import sample
+# from random import sample
+from random import shuffle
 
 postweet = tweet.strings('positive_tweets.json')
 negtweet = tweet.strings('negative_tweets.json')
+data = list(postweet)
+data.extend(negtweet)
+labels = [[1,0]]*len(postweet)
+labels.extend([[0,1]]*len(negtweet))
+index_shuf = list(range(len(data)))
+shuffle(index_shuf)
+data = [data[i] for i in index_shuf]
+labels = [labels[i] for i in index_shuf]
+labels = np.array(labels)
+
+from Tools.Feature_Extraction import chisqure
+selected_terms = chisqure(data, labels, feature_count = 0)
 
 ## Process Dataset ##
-postweet_vectors, negtweet_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(postweet, negtweet)
+data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
 
 
 
@@ -57,7 +67,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[2,4], learning_rate=0.001, batch_size=32, num_epochs=100)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[4,2], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):

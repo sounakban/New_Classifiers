@@ -6,8 +6,8 @@ class Get_Embeddings:
 
 	def __init__(self):
 		import gensim
-		# self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('/Volumes/Files/Work/Research/Information Retrieval/General Tools/GoogleNews-vectors-negative300.bin', binary=True)
-		self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('./../../Resources/GoogleNews-vectors-negative300.bin', binary=True)
+		self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('/Volumes/Files/Work/Research/Information Retrieval/General Tools/GoogleNews-vectors-negative300.bin', binary=True)
+		# self.google_vecs = gensim.models.KeyedVectors.load_word2vec_format('./../../Resources/GoogleNews-vectors-negative300.bin', binary=True)
 		#List of words in vocabulary
 		self.embedding_vocab = []
 		#Mapping of doc words to embedding table

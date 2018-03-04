@@ -1,6 +1,7 @@
 #####################################
 ## Contains Classification Modules ##
 #####################################
+np.random.seed(123456)
 
 class CNN_Classifier:
 
@@ -26,7 +27,6 @@ class CNN_Classifier:
         from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam, Adagrad
-        np.random.seed(123456)
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
@@ -49,8 +49,8 @@ class CNN_Classifier:
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.3)(model_conv)
-        model_hidden = Dense(2024, activation="relu")(model_hidden)
-        model_hidden = Dropout(0.5)(model_hidden)
+        # model_hidden = Dense(2024, activation="relu")(model_hidden)
+        # model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(512, activation="relu")(model_hidden)
         model_hidden = Dropout(0.2)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
@@ -58,8 +58,8 @@ class CNN_Classifier:
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
         model = Model(model_input, model_output)
-        # optimizer = Adam(lr=self.learning_rate)
-        optimizer = Adagrad(lr=self.learning_rate)
+        optimizer = Adam(lr=self.learning_rate)
+        # optimizer = Adagrad(lr=self.learning_rate)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
@@ -97,8 +97,7 @@ class RNN_Classifier:
         from keras.models import Model
         from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM
         from keras.layers.merge import Concatenate
-        from keras.optimizers import Adam
-        np.random.seed(123456)
+        from keras.optimizers import Adam, Adagrad
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
@@ -118,6 +117,7 @@ class RNN_Classifier:
 
         model = Model(model_input, model_output)
         optimizer = Adam(lr=self.learning_rate)
+        # optimizer = Adagrad(lr=self.learning_rate)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
@@ -155,8 +155,7 @@ class HNN_RR_Classifier:
         from keras.models import Model
         from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM, TimeDistributed
         from keras.layers.merge import Concatenate
-        from keras.optimizers import Adam
-        np.random.seed(123456)
+        from keras.optimizers import Adam, Adagrad
 
         input_shape = (dim2_length, dim3_length)
         model_input = Input(shape=input_shape)
@@ -185,6 +184,7 @@ class HNN_RR_Classifier:
 
         model = Model(model_input, model_output)
         optimizer = Adam(lr=self.learning_rate)
+        # optimizer = Adagrad(lr=self.learning_rate)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
