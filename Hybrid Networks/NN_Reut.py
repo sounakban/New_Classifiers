@@ -99,10 +99,11 @@ train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_
 
 #-------------------------------------------Classification-------------------------------------------
 
-from Tools.Classifier import HNN_RR_Classifier
+from Tools.Classifier import HNN_RR_Classifier, HNN_CR_Classifier
 
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
-classifier = HNN_RR_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
+# classifier = HNN_RR_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
+classifier = HNN_CR_Classifier(RNN_output_size=256, filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=7, num_epochs=100)
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize[0], maxSize[1], train_labels.shape[1])
 
 

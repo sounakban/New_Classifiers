@@ -76,7 +76,7 @@ class CNN_Classifier:
         assert type(y_train) == req_type and type(y_test) == req_type
 
         from keras.models import Model
-        from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding
+        from keras.layers import Input, Dense, Dropout, Flatten, Reshape, MaxPooling1D, Convolution1D, Embedding
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam, Adagrad
 
@@ -97,15 +97,16 @@ class CNN_Classifier:
                                  strides=1)(model_embedding)
             conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
             conv = Flatten()(conv)
+            # conv = Reshape((-1,))(conv)
             conv_blocks.append(conv)
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.5)(model_conv)
-        # model_hidden = Dense(2024, activation="relu")(model_hidden)
+        # model_hidden = Dense(1536, activation="relu")(model_hidden)
         # model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(512, activation="relu")(model_hidden)
-        model_hidden = Dropout(0.2)(model_hidden)
-        model_hidden = Dense(64, activation="relu")(model_hidden)
+        model_hidden = Dropout(0.5)(model_hidden)
+        # model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
@@ -113,7 +114,7 @@ class CNN_Classifier:
         optimizer = Adam(lr=self.learning_rate)
         # optimizer = Adagrad(lr=self.learning_rate)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
-        # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+        # model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
         print(type(x_train), " ; ", type(y_train))
         print(x_train.shape, ' ; ', x_test.shape)
