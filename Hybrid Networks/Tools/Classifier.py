@@ -301,14 +301,10 @@ class HNN_CR_Classifier:
             conv = TimeDistributed(Flatten())(conv)
             print("Post Flatten shape: ", conv.get_shape)
             conv_blocks.append(conv)
-        # model_conv = TimeDistributed(Concatenate())(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
         model_conv_sentences = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
-
-
-        # model_recurrent_sentences  = TimeDistributed(LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2))(model_embedding)
         print("Sentence Vector tensor shape: ", model_conv_sentences.get_shape)
-        model_recurrent  = LSTM(int(embeddings.shape[1]*2), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_conv_sentences)
+        model_recurrent  = LSTM(1024, activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_conv_sentences)
         print("Doc Vector tensor shape: ", model_recurrent.get_shape)
 
         #######################################################################################################
