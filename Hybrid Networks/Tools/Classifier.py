@@ -62,6 +62,11 @@ class CNN_Classifier:
     def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
+        print("Using CNN with parameters : \nBatch-size : {},  \
+                                            \nFilter-Sizes : {},  \
+                                            \nFilter-Counts : {}, \
+                                            \nPool-Windows : {}, {}", \
+                                            self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows)
         self.filter_sizes = filter_sizes
         self.filter_counts = filter_counts
         self.pool_windows = pool_windows
@@ -135,6 +140,7 @@ class CNN_Classifier:
 class RNN_Classifier:
 
     def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
+        print("Using RNN with {} Neurons : ", self.output_size)
         self.output_size = output_size
         self.batch_size = batch_size
         self.num_epochs = num_epochs
@@ -310,6 +316,90 @@ class HNN_CR_Classifier:
         #######################################################################################################
 
         model_hidden = Dense(512, activation="relu")(model_recurrent)
+        model_hidden = Dropout(0.5)(model_hidden)
+        model_hidden = Dense(64, activation="relu")(model_hidden)
+        model_output = Dense(class_count, activation="softmax")(model_hidden)
+        # model_output = Dense(1, activation="sigmoid")(model_hidden)
+
+        model = Model(model_input, model_output)
+        optimizer = Adam(lr=self.learning_rate)
+        # optimizer = Adagrad(lr=self.learning_rate)
+        model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+        # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+        print(type(x_train), " ; ", type(y_train))
+        print(x_train.shape, ' ; ', x_test.shape)
+        # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+        #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+        model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+          validation_split=0.2, verbose=2, shuffle=True)
+
+        test_model(model, x_test, y_test)
+
+        return 0
+
+
+
+
+
+class HNN_RC_Classifier:
+
+    def __init__(self, RNN_output_size, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+        self.output_size = RNN_output_size
+        assert len(filter_sizes) == len(filter_counts)
+        assert len(filter_sizes) == len(pool_windows)
+        self.filter_sizes = filter_sizes
+        self.filter_counts = filter_counts
+        self.pool_windows = pool_windows
+        self.batch_size = batch_size
+        self.num_epochs = num_epochs
+        self.learning_rate = learning_rate
+
+
+    def predict(self, x_train, y_train, x_test, y_test, embeddings, dim2_length, dim3_length, class_count):
+        req_type = type(np.array([]))
+        assert type(x_train) == req_type and type(x_test) == req_type
+        assert type(y_train) == req_type and type(y_test) == req_type
+
+        from keras.models import Model
+        from keras.layers import Input, Dense, Dropout, Flatten, MaxPooling1D, Convolution1D, Embedding, LSTM, TimeDistributed
+        from keras.layers.merge import Concatenate
+        from keras.optimizers import Adam, Adagrad
+
+        input_shape = (dim2_length, dim3_length)
+        model_input = Input(shape=input_shape)
+        print("Input tensor shape: ", model_input.get_shape)
+        model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
+        print("Word Vector (Embeddings) tensor shape: ", model_embedding.get_shape)
+        # model_embedding = Dropout(0.4)(model_embedding)
+
+        #######################################################################################################
+
+
+        model_recurrent_sentences  = TimeDistributed(LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2))(model_embedding)
+        print("Sentence Vector tensor shape: ", model_recurrent_sentences.get_shape)
+
+        conv_blocks = []
+        for i in range(len(self.filter_sizes)):
+            conv = Convolution1D(filters=self.filter_counts[i],
+                                 kernel_size=self.filter_sizes[i],
+                                 padding="valid",
+                                 activation="relu",
+                                 use_bias=False,
+                                 strides=1)(model_recurrent_sentences)
+            print("Post convolution shape: ", conv.get_shape)
+            conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
+            print("Post Pooling shape: ", conv.get_shape)
+            conv = Flatten()(conv)
+            print("Post Flatten shape: ", conv.get_shape)
+            conv_blocks.append(conv)
+        model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
+        print("Doc Vector tensor shape: ", model_conv.get_shape)
+
+        #######################################################################################################
+
+        model_hidden = Dense(512, activation="relu")(model_conv)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)

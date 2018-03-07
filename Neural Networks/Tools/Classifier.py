@@ -62,6 +62,11 @@ class CNN_Classifier:
     def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
+        print("Using CNN with parameters : \nBatch-size : {},  \
+                                            \nFilter-Sizes : {},  \
+                                            \nFilter-Counts : {}, \
+                                            \nPool-Windows : {}, {}", \
+                                            self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows)
         self.filter_sizes = filter_sizes
         self.filter_counts = filter_counts
         self.batch_size = batch_size
@@ -136,6 +141,7 @@ class CNN_Classifier:
 class RNN_Classifier:
 
     def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
+        print("Using RNN with {} Neurons : ", self.output_size)
         self.output_size = output_size
         self.batch_size = batch_size
         self.num_epochs = num_epochs
