@@ -216,7 +216,7 @@ class RNN_Classifier:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
-            print("Using RNN with {} Neurons : ", self.output_size)
+        print("Using RNN with {} Neurons : ", self.output_size)
         print("Using RNN with parameters : \nBatch-size : {},  \
                                             \nLearning-Rate : {}".format \
                                             (self.batch_size, self.learning_rate) )
