@@ -71,8 +71,8 @@ class CNN_Classifier:
         print("Using CNN with parameters : \nBatch-size : {},  \
                                             \nFilter-Sizes : {},  \
                                             \nFilter-Counts : {}, \
-                                            \nPool-Windows : {}, {}", \
-                                            self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows)
+                                            \nPool-Windows : {}".format \
+                                            (self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows) )
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
