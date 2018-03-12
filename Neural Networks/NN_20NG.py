@@ -24,8 +24,8 @@ def get_Embeddings(train_docs=[], test_docs=[], selected_terms = set()):
 		train_doc_vectors = doc_vectors[:len(train_docs)]
 		test_doc_vectors = doc_vectors[len(train_docs):]
 
-		with open(fileName, 'wb') as temp:
-			pickle.dump((train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab), temp)
+		# with open(fileName, 'wb') as temp:
+		# 	pickle.dump((train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab), temp)
 
 	print("Embeddings Shape : ",embeddings.shape)
 	return (train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab)

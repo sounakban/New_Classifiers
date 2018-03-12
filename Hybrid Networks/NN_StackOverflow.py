@@ -21,8 +21,8 @@ def get_Embeddings(data=[], selected_terms = set()):
 		from keras.preprocessing.sequence import pad_sequences
 		data_vectors = pad_sequences(data_vectors, maxlen=maxSize, padding='post', value=0.)
 
-		with open(fileName, 'wb') as temp:
-			pickle.dump((data_vectors, embeddings, maxSize, embedding_vocab), temp)
+		# with open(fileName, 'wb') as temp:
+		# 	pickle.dump((data_vectors, embeddings, maxSize, embedding_vocab), temp)
 
 	print("Embeddings Shape : ",embeddings.shape)
 	return (data_vectors, embeddings, maxSize, embedding_vocab)
