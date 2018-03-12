@@ -71,7 +71,7 @@ kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, DNN_Classifier
 
 # classifier = DNN_Classifier(learning_rate=0.001, batch_size=32, num_epochs=30)
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300,250], pool_windows=[6,3], learning_rate=0.001, batch_size=32, num_epochs=30)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300,150], pool_windows=[8,4], learning_rate=0.001, batch_size=32, num_epochs=30)
 # classifier = CNN_Classifier(filter_sizes=[5], filter_counts=[200], pool_windows=[2], learning_rate=0.001, batch_size=32, num_epochs=30)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 
