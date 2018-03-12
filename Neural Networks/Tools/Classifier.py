@@ -147,8 +147,8 @@ class RNN_Classifier:
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
         print("Using RNN with parameters : \nBatch-size : {},  \
-                                            \nLearning-Rate : {}", \
-                                            self.batch_size, self.learning_rate)
+                                            \nLearning-Rate : {}".format \
+                                            (self.batch_size, self.learning_rate) )
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
