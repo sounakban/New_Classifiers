@@ -227,10 +227,10 @@ class RNN_Classifier:
         model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
 
-        model_hidden = Dense(1536, activation="relu")(model_recurrent)
+        # model_hidden = Dense(1536, activation="relu")(model_recurrent)
+        # model_hidden = Dropout(0.7)(model_hidden)
+        model_hidden = Dense(512, activation="relu")(model_hidden)
         model_hidden = Dropout(0.7)(model_hidden)
-        # model_hidden = Dense(512, activation="relu")(model_hidden)
-        # model_hidden = Dropout(0.3)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
