@@ -62,17 +62,17 @@ class CNN_Classifier:
     def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
-        print("Using CNN with parameters : \nBatch-size : {},  \
-                                            \nFilter-Sizes : {},  \
-                                            \nFilter-Counts : {}, \
-                                            \nPool-Windows : {}, {}", \
-                                            self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows)
         self.filter_sizes = filter_sizes
         self.filter_counts = filter_counts
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.pool_windows = pool_windows
         self.learning_rate = learning_rate
+        print("Using CNN with parameters : \nBatch-size : {},  \
+                                            \nFilter-Sizes : {},  \
+                                            \nFilter-Counts : {}, \
+                                            \nPool-Windows : {}, {}", \
+                                            self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows)
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
@@ -146,6 +146,9 @@ class RNN_Classifier:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
+        print("Using RNN with parameters : \nBatch-size : {},  \
+                                            \nLearning-Rate : {}", \
+                                            self.batch_size, self.learning_rate)
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
