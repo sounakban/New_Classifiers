@@ -65,7 +65,7 @@ totF1 = 0.0
 
 from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
-from Tools.Classifier import CNN_Classifier, RNN_Classifier
+from Tools.Classifier import CNN_Classifier, RNN_Classifier, DNN_Classifier
 
 classifier = DNN_Classifier(learning_rate=0.001, batch_size=32, num_epochs=30)
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[4,2], learning_rate=0.001, batch_size=32, num_epochs=30)
