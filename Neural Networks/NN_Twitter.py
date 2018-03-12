@@ -10,6 +10,9 @@ def get_Embeddings(data=[], selected_terms = set()):
 	if os.path.exists(fileName):
 		with open(fileName, 'rb') as temp:
 			doc_vectors, embeddings, maxSize, embedding_vocab = pickle.load(temp)
+			print("Doc vec", doc_vectors[0])
+			print("Embedding vec", embeddings[0])
+			print("vocab", embedding_vocab[0:3])
 	else:
 		all_docs = list(data)
 
