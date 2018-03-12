@@ -83,22 +83,7 @@ class DNN_Classifier:
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
-        # model_embedding = Dropout(0.4)(model_embedding)
-        # conv_blocks = []
-        # for i in range(len(self.filter_sizes)):
-        #     conv = Convolution1D(filters=self.filter_counts[i],
-        #                          kernel_size=self.filter_sizes[i],
-        #                          padding="valid",
-        #                          activation="relu",
-        #                          use_bias=False,
-        #                          strides=1)(model_embedding)
-        #     conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
-        #     conv = Flatten()(conv)
-        #     # conv = Reshape((-1,))(conv)
-        #     conv_blocks.append(conv)
-        # model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
-        # model_hidden = Dropout(0.05)(model_conv)
         model_hidden = Dense(1536, activation="relu")(model_embedding)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(512, activation="relu")(model_hidden)
@@ -242,7 +227,9 @@ class RNN_Classifier:
         model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
 
-        model_hidden = Dense(512, activation="relu")(model_recurrent)
+        model_hidden = Dense(1536, activation="relu")(model_recurrent)
+        model_hidden = Dropout(0.7)(model_hidden)
+        model_hidden = Dense(512, activation="relu")(model_hidden)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
