@@ -30,6 +30,7 @@ def chisqure(train_docs, train_labels, feature_count = 500):
 		return index2vocabulary_dict.values()
 
 	from sklearn.feature_selection import SelectKBest, chi2
+	feature_count = train_docs_vectorized.shape[1] if train_docs_vectorized.shape[1] < feature_count else feature_count
 	feature_selector = SelectKBest(chi2, k=feature_count)
 	docs_new = feature_selector.fit_transform(train_docs_vectorized, train_labels)
 	feature_mask = kept_features = feature_selector.get_support(indices=False)
