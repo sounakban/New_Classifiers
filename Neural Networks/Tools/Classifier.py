@@ -79,10 +79,10 @@ class DNN_Classifier:
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
-        print("Input tensor shape: ", model_input.get_shape)
+        print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
-        print("Embeddings tensor shape: ", model_embedding.get_shape)
+        print("Embeddings tensor shape: ", int_shape(model_embedding))
 
         model_hidden = Dense(1536, activation="relu")(model_embedding)
         model_hidden = Dropout(0.5)(model_hidden)
@@ -143,10 +143,10 @@ class CNN_Classifier:
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
-        print("Input tensor shape: ", model_input.get_shape)
+        print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
-        print("Embeddings tensor shape: ", model_embedding.get_shape)
+        print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
         conv_blocks = []
         for i in range(len(self.filter_sizes)):
@@ -215,10 +215,10 @@ class BDRNN_Classifier:
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
-        print("Input tensor shape: ", model_input.get_shape)
+        print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
-        print("Embeddings tensor shape: ", model_embedding.get_shape)
+        print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
         # model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
@@ -276,13 +276,13 @@ class RNN_Classifier:
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
-        print("Input tensor shape: ", model_input.get_shape)
+        print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         # print("Embeddings tensor shape: ", model_embedding.get_shape)
         print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
-        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
+        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.5, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
 
         # model_hidden = Dense(1536, activation="relu")(model_recurrent)
