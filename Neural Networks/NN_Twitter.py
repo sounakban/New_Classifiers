@@ -34,8 +34,6 @@ def get_Embeddings(data=[], selected_terms = set()):
 
 
 
-
-
 #-------------------------------------------Prepare Data-------------------------------------------
 
 from nltk.corpus import twitter_samples as tweet
@@ -70,7 +68,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300, 150], pool_windows=[6,3], learning_rate=0.001, batch_size=256, num_epochs=10)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300, 150], pool_windows=[6,3], learning_rate=0.001, batch_size=256, num_epochs=15)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
 
@@ -82,76 +80,6 @@ for train_indices, test_indices in kf.split(data_vectors):
 
 
 
-
-# for i in range(K):
-#     """
-#     pos_train_indeces = sample(range(len(postweet)), int(len(postweet)*train_cut) )
-#     neg_train_indeces = sample(range(len(negtweet)), int(len(negtweet)*train_cut) )
-#     pos_test_indeces = list( set(range(len(postweet))) - set(pos_train_indeces) )
-#     neg_test_indeces = list( set(range(len(postweet))) - set(pos_train_indeces) )
-#     """
-#
-#     pos_test_indeces = range(i*pos_set_size, (i+1)*pos_set_size)
-#     neg_test_indeces = range(i*neg_set_size, (i+1)*neg_set_size)
-#     pos_train_indeces = list( set(range(len(postweet))) - set(pos_test_indeces) )
-#     neg_train_indeces = list( set(range(len(postweet))) - set(neg_test_indeces) )
-#     print len(pos_test_indeces), len(neg_test_indeces), len(pos_train_indeces), len(neg_train_indeces)
-#
-#     train_docs = [postweet[i] for i in pos_train_indeces]
-#     train_docs.extend( [negtweet[i] for i in neg_train_indeces] )
-#     test_docs = [postweet[i] for i in pos_test_indeces]
-#     test_docs.extend( [negtweet[i] for i in neg_test_indeces] )
-#
-#
-#     from sklearn.feature_extraction.text import TfidfVectorizer
-#     from sklearn.preprocessing import MultiLabelBinarizer
-#     stop_words = cachedStopWords
-#
-#
-#     # Learn and transform train documents
-#     # Tokenisation
-#     vectorizer = TfidfVectorizer(stop_words=stop_words,
-#                                  tokenizer=tokenize)
-#     vectorised_train_documents = vectorizer.fit_transform(train_docs)
-#     print vectorised_train_documents.shape
-#     vectorised_test_documents = vectorizer.transform(test_docs)
-#
-#
-#     test_labels = ["pos"] * pos_set_size
-#     test_labels.extend(["neg"] * neg_set_size)
-#     train_labels = ["pos"] * (len(postweet) - pos_set_size)
-#     train_labels.extend(["neg"] * (len(negtweet) - neg_set_size))
-#
-#
-#
-#
-#     #-------------------------------------------Classification-------------------------------------------
-#     from sklearn.multiclass import OneVsRestClassifier
-#
-#     """
-#     from sklearn.naive_bayes import GaussianNB
-#     classifier = OneVsRestClassifier(GaussianNB())
-#     #"""
-#     """
-#     from sklearn.svm import LinearSVC
-#     classifier = OneVsRestClassifier(LinearSVC(random_state=42))
-#     #"""
-#     """
-#     from sklearn.naive_bayes import MultinomialNB
-#     #classifier = OneVsRestClassifier(MultinomialNB(alpha=0.01))
-#     classifier = OneVsRestClassifier(MultinomialNB())
-#     #"""
-#     #"""
-#     from sklearn.neighbors import KNeighborsClassifier
-#     classifier = OneVsRestClassifier(KNeighborsClassifier(n_neighbors=100, n_jobs=-2))
-#     #"""
-#
-#
-#     classifier.fit(vectorised_train_documents, train_labels)
-#
-#     predictions = classifier.predict(vectorised_test_documents)
-#
-#
 #     #-------------------------------------------Evaluation-------------------------------------------
 #
 #     from sklearn.metrics import f1_score, precision_score, recall_score
