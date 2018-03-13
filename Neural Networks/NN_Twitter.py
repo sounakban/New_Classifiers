@@ -70,7 +70,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300, 450], pool_windows=[6,3], learning_rate=0.001, batch_size=128, num_epochs=60)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[300, 450], pool_windows=[6,3], learning_rate=0.001, batch_size=128, num_epochs=30)
 # classifier = CNN_Classifier(filter_sizes=[5], filter_counts=[200], pool_windows=[2], learning_rate=0.001, batch_size=32, num_epochs=30)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=64, num_epochs=30)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=32, num_epochs=30)
