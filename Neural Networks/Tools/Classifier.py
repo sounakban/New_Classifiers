@@ -276,13 +276,15 @@ class RNN_Classifier:
         from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam, Adagrad
+        from keras.backend import int_shape
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
-        print("Embeddings tensor shape: ", model_embedding.get_shape)
+        # print("Embeddings tensor shape: ", model_embedding.get_shape)
+        print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
         model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.2, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
@@ -291,7 +293,7 @@ class RNN_Classifier:
         # model_hidden = Dropout(0.7)(model_hidden)
         # model_hidden = Dense(512, activation="relu")(model_recurrent)
         # model_hidden = Dropout(0.7)(model_hidden)
-        model_hidden = Dense(model_recurrent.get_shape[-1]/2, activation="relu")(model_recurrent)
+        model_hidden = Dense(int_shape(model_recurrent)[-1]/2, activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
