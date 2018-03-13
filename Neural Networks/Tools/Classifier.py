@@ -289,8 +289,10 @@ class RNN_Classifier:
 
         # model_hidden = Dense(1536, activation="relu")(model_recurrent)
         # model_hidden = Dropout(0.7)(model_hidden)
-        model_hidden = Dense(512, activation="relu")(model_recurrent)
-        model_hidden = Dropout(0.7)(model_hidden)
+        # model_hidden = Dense(512, activation="relu")(model_recurrent)
+        # model_hidden = Dropout(0.7)(model_hidden)
+        model_hidden = Dense(model_recurrent.get_shape[-1]/2, activation="relu")(model_recurrent)
+        model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
