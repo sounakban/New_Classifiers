@@ -22,7 +22,9 @@ def plot_AccLoss_Curve(history):
     # plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['Accuracy', 'Loss'], loc='upper left')
-    plt.show()
+    # plt.show()
+    fig = plt.figure()
+    fig.savefig("test1.png")
 
 
 def test_model(model, X_test, Y_test):
