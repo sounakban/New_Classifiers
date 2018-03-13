@@ -5,7 +5,9 @@
 #-----------------------------------Common Functions & Imports-------------------------------------
 
 import numpy as np
-np.random.seed(123456)
+np.random.seed(1337)
+from tensorflow import set_random_seed
+set_random_seed(2017)
 
 def test_model(model, X_test, Y_test):
     from keras.utils import to_categorical
@@ -282,7 +284,7 @@ class RNN_Classifier:
         # print("Embeddings tensor shape: ", model_embedding.get_shape)
         print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
-        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='tanh', dropout=0.5, recurrent_dropout=0.2)(model_embedding)
+        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='relu', dropout=0.5, recurrent_dropout=0.2)(model_embedding)
         # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
 
         # model_hidden = Dense(1536, activation="relu")(model_recurrent)
