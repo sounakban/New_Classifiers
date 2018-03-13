@@ -8,6 +8,7 @@ import numpy as np
 np.random.seed(1337)
 from tensorflow import set_random_seed
 set_random_seed(2017)
+from keras.backend import int_shape
 
 def test_model(model, X_test, Y_test):
     from keras.utils import to_categorical
@@ -276,7 +277,6 @@ class RNN_Classifier:
         from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam, Adagrad
-        from keras.backend import int_shape
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
