@@ -165,11 +165,13 @@ class CNN_Classifier:
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.5)(model_conv)
-        # model_hidden = Dense(1536, activation="relu")(model_hidden)
-        # model_hidden = Dropout(0.5)(model_hidden)
-        model_hidden = Dense(512, activation="relu")(model_hidden)
+        model_hidden = Dense(int(int_shape(model_hidden)[-1]/2), activation="relu")(model_hidden)
         model_hidden = Dropout(0.5)(model_hidden)
-        # model_hidden = Dense(64, activation="relu")(model_hidden)
+        model_hidden = Dense(256, activation="relu")(model_recurrent)
+        model_hidden = Dropout(0.8)(model_hidden)
+        model_hidden = Dense(128, activation="relu")(model_recurrent)
+        model_hidden = Dropout(0.6)(model_hidden)
+        model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
@@ -259,10 +261,10 @@ class RNN_Classifier:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
-        print("Using RNN with {} Neurons : ", self.output_size)
         print("Using RNN with parameters : \nBatch-size : {},  \
-                                            \nLearning-Rate : {}".format \
-                                            (self.batch_size, self.learning_rate) )
+                                            \nLearning-Rate : {},  \
+                                            \nNeurons : {}".format \
+                                            (self.batch_size, self.learning_rate, self.output_size) )
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
@@ -289,12 +291,10 @@ class RNN_Classifier:
 
         # model_hidden = Dense(1536, activation="relu")(model_recurrent)
         # model_hidden = Dropout(0.7)(model_hidden)
-        model_hidden = Dense(int(int_shape(model_recurrent)[-1]*2), activation="relu")(model_recurrent)
+        model_hidden = Dense(int(int_shape(model_recurrent)[-1]/2), activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
-        model_hidden = Dense(512, activation="relu")(model_recurrent)
-        model_hidden = Dropout(0.8)(model_hidden)
         model_hidden = Dense(256, activation="relu")(model_recurrent)
-        model_hidden = Dropout(0.7)(model_hidden)
+        model_hidden = Dropout(0.8)(model_hidden)
         model_hidden = Dense(128, activation="relu")(model_recurrent)
         model_hidden = Dropout(0.6)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
