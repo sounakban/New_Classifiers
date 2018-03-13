@@ -170,8 +170,6 @@ class CNN_Classifier:
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(1024, activation="relu")(model_hidden)
         model_hidden = Dropout(0.6)(model_hidden)
-        # model_hidden = Dense(128, activation="relu")(model_hidden)
-        # model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
         # model_output = Dense(1, activation="sigmoid")(model_hidden)
