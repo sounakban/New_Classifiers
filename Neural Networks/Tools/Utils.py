@@ -6,6 +6,7 @@ def preprocess(train_data, test_data):
 	wordnet_lemmatizer = WordNetLemmatizer()
 	from nltk.corpus import stopwords
 	stop_words = set(stopwords.words('english'))
+	stop_words = ()
 
 	ret_train_data = []
 	for sample in train_data:
