@@ -177,8 +177,6 @@ class CNN_Classifier:
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
-        print(type(x_train), " ; ", type(y_train))
-        print(x_train.shape, ' ; ', x_test.shape)
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
         #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
@@ -240,8 +238,6 @@ class BDRNN_Classifier:
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
-        print(type(x_train), " ; ", type(y_train))
-        print(x_train.shape, ' ; ', x_test.shape)
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
         #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
@@ -293,7 +289,7 @@ class RNN_Classifier:
         # model_hidden = Dropout(0.7)(model_hidden)
         # model_hidden = Dense(512, activation="relu")(model_recurrent)
         # model_hidden = Dropout(0.7)(model_hidden)
-        model_hidden = Dense(int_shape(model_recurrent)[-1]/2, activation="relu")(model_recurrent)
+        model_hidden = Dense(int(int_shape(model_recurrent)[-1]/2), activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
@@ -305,8 +301,6 @@ class RNN_Classifier:
         model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
         # model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
-        print(type(x_train), " ; ", type(y_train))
-        print(x_train.shape, ' ; ', x_test.shape)
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
         #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
