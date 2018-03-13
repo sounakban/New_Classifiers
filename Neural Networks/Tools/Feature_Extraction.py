@@ -5,7 +5,7 @@
 
 def vectorize_tfidf(docs):
 	from sklearn.feature_extraction.text import TfidfVectorizer
-	vectorizer = TfidfVectorizer(max_df=0.55, min_df=10, stop_words=None)
+	vectorizer = TfidfVectorizer(max_df=1.0, min_df=1, stop_words=None)
 
 	X = vectorizer.fit_transform(docs)
 	vocabulary2index_dict = vectorizer.vocabulary_
