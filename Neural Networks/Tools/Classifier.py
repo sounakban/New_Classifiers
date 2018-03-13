@@ -14,6 +14,17 @@ earlystop = EarlyStopping(monitor='val_acc', min_delta=0.0001, patience=5, verbo
 callbacks_list = [earlystop]
 
 
+def plot_AccLoss_Curve(history):
+    # summarize history for accuracy
+    plt.plot(history.history['val_acc'])
+    plt.plot(history.history['val_loss'])
+    plt.title('Accuracy-Loss Graph')
+    # plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['Accuracy', 'Loss'], loc='upper left')
+    plt.show()
+
+
 def test_model(model, X_test, Y_test):
     from keras.utils import to_categorical
     #Get Class of max predicted value
@@ -256,7 +267,7 @@ class RNN_Classifier:
 
         history = model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
           validation_split=0.2, verbose=2, shuffle=True)
-        print("Perf:\n ", history.history.keys())
+        plot_AccLoss_Curve(history)
 
         test_model(model, x_test, y_test)
 
