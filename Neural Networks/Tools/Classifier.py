@@ -202,10 +202,10 @@ class BDRNN_Classifier:
         self.batch_size = batch_size
         self.num_epochs = num_epochs
         self.learning_rate = learning_rate
-        print("Using RNN with {} Neurons : ", self.output_size)
-        print("Using RNN with parameters : \nBatch-size : {},  \
-                                            \nLearning-Rate : {}".format \
-                                            (self.batch_size, self.learning_rate) )
+        print("Using BiDirectional-RNN with parameters : \nBatch-size : {},  \
+                                            \nLearning-Rate : {},  \
+                                            \nNeurons : {}".format \
+                                            (self.batch_size, self.learning_rate, self.output_size) )
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
@@ -285,8 +285,8 @@ class RNN_Classifier:
         # print("Embeddings tensor shape: ", model_embedding.get_shape)
         print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
-        model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='relu', dropout=0.5, recurrent_dropout=0.2)(model_embedding)
-        # model_recurrent  = LSTM(embeddings.shape[1], activation='tanh', dropout=0.2)(model_embedding)
+        # model_recurrent  = LSTM(int(embeddings.shape[1]*1.5), activation='relu', dropout=0.5, recurrent_dropout=0.2)(model_embedding)
+        model_recurrent  = LSTM(embeddings.shape[1], activation='relu', dropout=0.2)(model_embedding)
 
         model_hidden = Dense(int(int_shape(model_recurrent)[-1]/2), activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
