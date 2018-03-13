@@ -15,6 +15,8 @@ callbacks_list = [earlystop]
 
 
 def plot_AccLoss_Curve(history):
+    import matplotlib
+    matplotlib.use('Agg') # Must be before importing matplotlib.pyplot or pylab!
     import matplotlib.pyplot as plt
     # summarize history for Accuracy and Loss
     print("Type: ", type(history.history['val_acc']))
