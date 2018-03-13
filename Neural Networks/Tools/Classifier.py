@@ -9,6 +9,10 @@ np.random.seed(1337)
 from tensorflow import set_random_seed
 set_random_seed(2017)
 from keras.backend import int_shape
+from keras.callbacks import EarlyStopping
+earlystop = EarlyStopping(monitor='val_acc', min_delta=0.0001, patience=5, verbose=1, mode='auto')
+callbacks_list = [earlystop]
+
 
 def test_model(model, X_test, Y_test):
     from keras.utils import to_categorical
@@ -250,8 +254,9 @@ class RNN_Classifier:
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
         #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
-        model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+        val_perf = model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
           validation_split=0.2, verbose=2, shuffle=True)
+        print("Perf:\n ", val_perf)
 
         test_model(model, x_test, y_test)
 
