@@ -289,7 +289,7 @@ class RNN_Classifier:
 
         # model_hidden = Dense(1536, activation="relu")(model_recurrent)
         # model_hidden = Dropout(0.7)(model_hidden)
-        model_hidden = Dense(int(int_shape(model_recurrent)[-1]/2), activation="relu")(model_recurrent)
+        model_hidden = Dense(int(int_shape(model_recurrent)[-1]*2), activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
         model_hidden = Dense(512, activation="relu")(model_recurrent)
         model_hidden = Dropout(0.8)(model_hidden)
