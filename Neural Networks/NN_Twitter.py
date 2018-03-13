@@ -68,7 +68,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[400, 250], pool_windows=[6,3], learning_rate=0.001, batch_size=128, num_epochs=7)
+classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[400, 250], pool_windows=[6,3], learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
 
@@ -80,45 +80,6 @@ for train_indices, test_indices in kf.split(data_vectors):
 
 
 
-#     #-------------------------------------------Evaluation-------------------------------------------
-#
-#     from sklearn.metrics import f1_score, precision_score, recall_score
-#
-#     #MICRO
-#     precision = precision_score(test_labels, predictions, average='micro')
-#     totprec += precision
-#     recall = recall_score(test_labels, predictions, average='micro')
-#     totrec += recall
-#     f1 = f1_score(test_labels, predictions, average='micro')
-#     totF1 += f1
-#
-#     print("Micro-average quality numbers")
-#     print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}"
-#             .format(precision, recall, f1))
-#
-#     #MACRO
-#     precision = precision_score(test_labels, predictions, average='macro')
-#     recall = recall_score(test_labels, predictions, average='macro')
-#     f1 = f1_score(test_labels, predictions, average='macro')
-#
-#     print("Macro-average quality numbers")
-#     print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}"
-#             .format(precision, recall, f1))
-#
-#     #INDIVIDUAL
-#     precision = precision_score(test_labels, predictions, average=None)
-#     recall = recall_score(test_labels, predictions, average=None)
-#     f1 = f1_score(test_labels, predictions, average=None)
-#
-#     print("All-Class quality numbers")
-#     print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
-#             .format(precision, recall, f1))
-#
-# print "10-fold Micro average:"
-# print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
-#         .format(totprec/10, totrec/10, totF1/10))
-#
-#
 # # Transform multilabel labels
 # train_labels = [(k,) for k in train_labels]
 # test_labels = [(k,) for k in test_labels]
