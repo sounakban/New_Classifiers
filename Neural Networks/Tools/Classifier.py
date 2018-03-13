@@ -237,7 +237,7 @@ class RNN_Classifier:
 
         model_hidden = Dense(int(int_shape(model_recurrent)[-1]/2), activation="relu")(model_recurrent)
         model_hidden = Dropout(0.5)(model_hidden)
-        model_hidden = Dense(256, activation="relu")(model_hidden)
+        model_hidden = Dense(512, activation="relu")(model_hidden)
         model_hidden = Dropout(0.6)(model_hidden)
         # model_hidden = Dense(128, activation="relu")(model_hidden)
         # model_hidden = Dropout(0.6)(model_hidden)
@@ -254,9 +254,9 @@ class RNN_Classifier:
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
         #   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
-        val_perf = model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+        history = model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
           validation_split=0.2, verbose=2, shuffle=True)
-        print("Perf:\n ", val_perf)
+        print("Perf:\n ", history.history.keys())
 
         test_model(model, x_test, y_test)
 
