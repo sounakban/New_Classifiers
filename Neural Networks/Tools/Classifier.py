@@ -5,9 +5,9 @@
 #-----------------------------------Common Functions & Imports-------------------------------------
 
 import numpy as np
-np.random.seed(1337)
+# np.random.seed(1337)
 from tensorflow import set_random_seed
-set_random_seed(2017)
+# set_random_seed(2017)
 from keras.backend import int_shape
 from keras.callbacks import EarlyStopping
 earlystop = EarlyStopping(monitor='val_acc', min_delta=0.0001, patience=5, verbose=1, mode='auto')
