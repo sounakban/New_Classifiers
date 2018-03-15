@@ -100,6 +100,7 @@ class CNN_Classifier:
 
 
     def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+        print("Nm of classes : ", class_count)
         req_type = type(np.array([]))
         assert type(x_train) == req_type and type(x_test) == req_type
         assert type(y_train) == req_type and type(y_test) == req_type
@@ -113,7 +114,7 @@ class CNN_Classifier:
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
-        model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
+        model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
         print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
         conv_blocks = []
@@ -124,25 +125,20 @@ class CNN_Classifier:
                                  activation="relu",
                                  use_bias=False,
                                  strides=1)(model_embedding)
-            conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
+            # conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
+            conv = MaxPooling1D(pool_size=sequence_length-self.filter_sizes[i])(conv)
             conv = Flatten()(conv)
-            # conv = Reshape((-1,))(conv)
             conv_blocks.append(conv)
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.5)(model_conv)
-        model_hidden = Dense(int(int_shape(model_hidden)[-1]*2), activation="relu")(model_hidden)
-        model_hidden = Dropout(0.5)(model_hidden)
-        model_hidden = Dense(1024, activation="relu")(model_hidden)
-        model_hidden = Dropout(0.6)(model_hidden)
-        model_hidden = Dense(64, activation="relu")(model_hidden)
         model_output = Dense(class_count, activation="softmax")(model_hidden)
-        # model_output = Dense(1, activation="sigmoid")(model_hidden)
 
         model = Model(model_input, model_output)
-        optimizer = Adam(lr=self.learning_rate)
-        # optimizer = Adagrad(lr=self.learning_rate)
-        model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+        # optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+        optimizer = Adagrad(lr=self.learning_rate)
+        model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+        # model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
         # model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
         # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,

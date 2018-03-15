@@ -45,7 +45,7 @@ labels = lb.fit_transform(labels)
 print("Label dimention : ", labels.shape)
 
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(data, labels, feature_count = 0)
+selected_terms = chisqure(data, labels, feature_count = 1500)
 
 ## Process Dataset ##
 data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
@@ -61,7 +61,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[2,5], filter_counts=[300,150], pool_windows=[4,2], learning_rate=0.001, batch_size=64, num_epochs=30)
+classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=500)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):
