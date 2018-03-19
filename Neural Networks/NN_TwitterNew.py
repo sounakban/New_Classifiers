@@ -39,18 +39,24 @@ def get_Embeddings(data=[], selected_terms = set()):
 from nltk.corpus import twitter_samples as tweet
 # from random import sample
 from random import shuffle
+import pandas as pd
 
-postweet = tweet.strings('positive_tweets.json')
-negtweet = tweet.strings('negative_tweets.json')
-data = list(postweet)
-data.extend(negtweet)
-labels = [[1,0]]*len(postweet)
-labels.extend([[0,1]]*len(negtweet))
+dataDF = pd.read_csv('/home/sounak/Resources/Data/Twitter for test/training.1600000.processed.noemoticon.csv', encoding='latin1', header=None)
+labels = dataDF[0].tolist()
+data = dataDF[5].tolist()
 index_shuf = list(range(len(data)))
 shuffle(index_shuf)
 data = [data[i] for i in index_shuf]
 labels = [labels[i] for i in index_shuf]
 labels = np.array(labels)
+
+## Binarize Labels ##
+from sklearn.preprocessing import LabelBinarizer
+lb = LabelBinarizer()
+labels = lb.fit_transform(labels)
+# To make labels 2D instead of 1D default behavior
+labels = np.hstack((labels, 1 - labels))
+print("Label dimention : ", labels.shape)
 
 from Tools.Feature_Extraction import chisqure
 selected_terms = chisqure(data, labels, feature_count = 800)

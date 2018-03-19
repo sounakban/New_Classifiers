@@ -59,10 +59,11 @@ totF1 = 0.0
 
 from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
-from Tools.Classifier import CNN_Classifier, RNN_Classifier
+from Tools.Classifier import CNN_Classifier, RNN_Classifier, Nested_CNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=500)
-# classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
+# classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=500)
+classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[300,150], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=7)
+# classifier = RNN_Classifier(output_size=512, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):
 	train_doc_vectors, train_labels = [data_vectors[i] for i in train_indices], labels[train_indices]  #[labels[i] for i in train_indices]
@@ -71,65 +72,6 @@ for train_indices, test_indices in kf.split(data_vectors):
 	new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
-# for i in range(K):
-#     """
-#     train_indices = sample(range(len(data)), int(len(data)*train_cut) )
-#     test_indices = list( set(range(len(data))) - set(train_indices) )
-#     """
-#
-#     test_indices = range(i*set_size, (i+1)*set_size)
-#     train_indices = list( set(range(len(data))) - set(test_indices) )
-#     print len(train_indices), len(test_indices)
-#
-#     train_docs = [data[i] for i in train_indices]
-#     test_docs = [data[i] for i in test_indices]
-#
-#     # Learn and transform train documents
-#     # Tokenisation
-#     vectorizer = TfidfVectorizer(stop_words=stop_words,
-#                                  tokenizer=tokenize)
-#     vectorised_train_documents = vectorizer.fit_transform(train_docs)
-#     print vectorised_train_documents.shape
-#     vectorised_test_documents = vectorizer.transform(test_docs)
-#
-#     train_labels = [labels[i] for i in train_indices]
-#     test_labels = [labels[i] for i in test_indices]
-#
-#
-#
-#     #import sys
-#     #sys.exit(0)
-#
-#
-#     #-------------------------------------------Classification-------------------------------------------
-#     from sklearn.multiclass import OneVsRestClassifier
-#
-#     """
-#     from sklearn.naive_bayes import GaussianNB
-#     classifier = OneVsRestClassifier(GaussianNB())
-#     #"""
-#     """
-#     from sklearn.svm import LinearSVC
-#     classifier = OneVsRestClassifier(LinearSVC(random_state=42))
-#     #"""
-#     """
-#     from sklearn.naive_bayes import MultinomialNB
-#     classifier = OneVsRestClassifier(MultinomialNB(alpha=0.01))
-#     #classifier = OneVsRestClassifier(MultinomialNB())
-#     #"""
-#     #"""
-#     from sklearn.neighbors import KNeighborsClassifier
-#     classifier = OneVsRestClassifier(KNeighborsClassifier(n_neighbors=100, n_jobs=-2))
-#     #"""
-#
-#
-#     classifier.fit(vectorised_train_documents, train_labels)
-#     predictions = classifier.predict(vectorised_test_documents)
-#
-#
-#
-#     #-------------------------------------------Evaluation-------------------------------------------
-#
 #     from sklearn.metrics import f1_score, precision_score, recall_score
 #
 #     #MICRO

@@ -9,6 +9,8 @@ def preprocess(train_data, test_data):
 	stop_words = ()
 
 	ret_train_data = []
+	#Removing URLs from text
+	train_data = [re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text) for text in train_data]
 	for sample in train_data:
 		tokens = tokenizer.tokenize(sample)
 		tokens = [wordnet_lemmatizer.lemmatize(word.lower()) for word in tokens if not word in stop_words]
