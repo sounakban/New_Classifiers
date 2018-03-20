@@ -61,8 +61,8 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, Nested_CNN_Classifier
 
-# classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=500)
-classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[300,150], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=7)
+classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=7)
+# classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[300,150], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = RNN_Classifier(output_size=512, learning_rate=0.001, batch_size=7, num_epochs=100)
 
 for train_indices, test_indices in kf.split(data_vectors):

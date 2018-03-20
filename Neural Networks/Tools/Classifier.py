@@ -161,7 +161,7 @@ class Nested_CNN_Classifier:
 
 class CNN_Classifier:
 
-    def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+    def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=20):
         assert len(filter_sizes) == len(filter_counts)
         assert len(filter_sizes) == len(pool_windows)
         self.filter_sizes = filter_sizes
@@ -187,11 +187,13 @@ class CNN_Classifier:
         from keras.layers import Input, Dense, Dropout, Flatten, Reshape, MaxPooling1D, Convolution1D, Embedding
         from keras.layers.merge import Concatenate
         from keras.optimizers import Adam, Adagrad
+        from keras.regularizers import l2
 
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", int_shape(model_input))
         # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
+        # model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
         model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
         print("Embeddings tensor shape: ", int_shape(model_embedding))
         # model_embedding = Dropout(0.4)(model_embedding)
@@ -205,12 +207,13 @@ class CNN_Classifier:
                                  strides=1)(model_embedding)
             # conv = MaxPooling1D(pool_size=self.pool_windows[i])(conv)
             conv = MaxPooling1D(pool_size=sequence_length-self.filter_sizes[i])(conv)
+            print("Pool shape: ", int_shape(conv))
             conv = Flatten()(conv)
             conv_blocks.append(conv)
         model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
 
         model_hidden = Dropout(0.5)(model_conv)
-        model_output = Dense(class_count, activation="softmax")(model_hidden)
+        model_output = Dense(class_count, activation="softmax", kernel_regularizer=l2(3), bias_regularizer=l2(3))(model_hidden)
 
         model = Model(model_input, model_output)
         # optimizer = Adagrad(lr=self.learning_rate)

@@ -36,16 +36,16 @@ def get_Embeddings(data=[], selected_terms = set()):
 
 #-------------------------------------------Prepare Data-------------------------------------------
 
-from nltk.corpus import twitter_samples as tweet
+from Tools import movie_reviews
 # from random import sample
 from random import shuffle
 
-postweet = tweet.strings('positive_tweets.json')
-negtweet = tweet.strings('negative_tweets.json')
-data = list(postweet)
-data.extend(negtweet)
-labels = [[1,0]]*len(postweet)
-labels.extend([[0,1]]*len(negtweet))
+posrev = movie_reviews.get_PosReviews()
+negrev = movie_reviews.get_NegReviews()
+data = list(posrev)
+data.extend(negrev)
+labels = [[1,0]]*len(posrev)
+labels.extend([[0,1]]*len(negrev))
 index_shuf = list(range(len(data)))
 shuffle(index_shuf)
 data = [data[i] for i in index_shuf]
@@ -53,7 +53,7 @@ labels = [labels[i] for i in index_shuf]
 labels = np.array(labels)
 
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(data, labels, feature_count = 800)
+selected_terms = chisqure(data, labels, feature_count = 0)
 
 ## Process Dataset ##
 data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
@@ -68,7 +68,7 @@ from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
 from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier, Nested_CNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,5,7], filter_counts=[300,240,150], pool_windows=[6,5,3], learning_rate=0.0001, batch_size=32, num_epochs=12)
+classifier = CNN_Classifier(filter_sizes=[3,4,5], filter_counts=[100,100,100], pool_windows=[10,10,10], learning_rate=0.0001, batch_size=50, num_epochs=50)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[30,20], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=4)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)

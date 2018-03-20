@@ -25,17 +25,18 @@ class Get_Embeddings:
 
 		from nltk.tokenize import RegexpTokenizer
 		tokenizer = RegexpTokenizer(r'\w+')
-		# from nltk.stem import WordNetLemmatizer
-		# wordnet_lemmatizer = WordNetLemmatizer()
+		from nltk.stem import WordNetLemmatizer
+		wordnet_lemmatizer = WordNetLemmatizer()
 		# from nltk.corpus import stopwords
 		# stop_words = set(stopwords.words('english'))
+		stop_words = set([])
 		# if len(selected_terms) > 0:
 		# 	selected_terms = set( [wordnet_lemmatizer.lemmatize(word.lower()) for word in selected_terms] )
 
 		not_in_vocab = 0
 		for doc_num in range(len(corpus)):
 			tokens = tokenizer.tokenize(corpus[doc_num])
-			# tokens = [wordnet_lemmatizer.lemmatize(word.lower()) for word in tokens if word in selected_terms and not word in stop_words]
+			tokens = [wordnet_lemmatizer.lemmatize(word.lower()) for word in tokens if word in selected_terms and not word in stop_words]
 			tokens = [word for word in tokens if word in selected_terms]
 
 			doc_temp = []
