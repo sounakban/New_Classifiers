@@ -53,7 +53,7 @@ labels = [labels[i] for i in index_shuf]
 labels = np.array(labels)
 
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(data, labels, feature_count = 0)
+selected_terms = chisqure(data, labels, feature_count = 10000)
 
 ## Process Dataset ##
 data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
@@ -66,9 +66,11 @@ totF1 = 0.0
 
 from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
-from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier, Nested_CNN_Classifier
+from Tools.Classifier import CNN1_Classifier, CNN_Classifier, RNN_Classifier, BDRNN_Classifier, Nested_CNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,4,5], filter_counts=[100,100,100], pool_windows=[10,10,10], learning_rate=0.0001, batch_size=50, num_epochs=50)
+# classifier = CNN_Classifier(filter_sizes=[3,4,5], filter_counts=[350,250,150], pool_windows=[10,10,10], learning_rate=0.001, batch_size=50, num_epochs=50)
+# CNN Clssifier parameters based on Paper
+classifier = CNN1_Classifier(filter_sizes=[3,5,7], filter_counts=[100,100,100], pool_windows=[10,10,10], learning_rate=0.001, batch_size=50, num_epochs=7)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[30,20], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=4)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
