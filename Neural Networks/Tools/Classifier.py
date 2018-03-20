@@ -158,7 +158,7 @@ class Nested_CNN_Classifier:
 
 
 
-# Vanilla Classifier, Not Customized with anything
+# Vanilla CNN implementation, Not Customized with anything
 class CNN_Classifier:
 
 	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=20):

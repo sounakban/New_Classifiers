@@ -53,7 +53,7 @@ labels = [labels[i] for i in index_shuf]
 labels = np.array(labels)
 
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(data, labels, feature_count = 10000)
+selected_terms = chisqure(data, labels, feature_count = 12000)
 
 ## Process Dataset ##
 data_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(data, selected_terms)
