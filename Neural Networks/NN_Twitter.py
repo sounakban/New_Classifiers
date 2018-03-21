@@ -66,12 +66,13 @@ totF1 = 0.0
 
 from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
-from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier, Nested_CNN_Classifier
+from Tools.Classifier import CNN_Classifier, RNN_Classifier, BDRNN_Classifier, Nested_CNN_Classifier, Stacked_BiLSTM_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[3,5,7], filter_counts=[300,240,150], pool_windows=[6,5,3], learning_rate=0.0001, batch_size=32, num_epochs=12)
+# classifier = CNN_Classifier(filter_sizes=[3,5,7], filter_counts=[300,240,150], pool_windows=[6,5,3], learning_rate=0.0001, batch_size=32, num_epochs=12)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[30,20], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=4)
 # classifier = BDRNN_Classifier(output_size=256, learning_rate=0.001, batch_size=256, num_epochs=15)
+classifier = Stacked_BiLSTM_Classifier(output_size=128, learning_rate=0.001, batch_size=256, num_epochs=15)
 
 for train_indices, test_indices in kf.split(data_vectors):
 	train_doc_vectors, train_labels = [data_vectors[i] for i in train_indices], labels[train_indices]  #[labels[i] for i in train_indices]

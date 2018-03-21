@@ -321,6 +321,156 @@ class CNN1_Classifier:
 
 
 
+
+
+ # Parameters have been tuned based on the implementation in the link
+ # Link : https://github.com/amitvpatel06/Twitter-Deep-Learning
+class CNN2_Classifier:
+
+	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=20):
+		assert len(filter_sizes) == len(filter_counts)
+		assert len(filter_sizes) == len(pool_windows)
+		self.filter_sizes = filter_sizes
+		self.filter_counts = filter_counts
+		self.batch_size = batch_size
+		self.num_epochs = num_epochs
+		self.pool_windows = pool_windows
+		self.learning_rate = learning_rate
+		print("Using CNN with parameters : \nBatch-size : {},  \
+											\nFilter-Sizes : {},  \
+											\nFilter-Counts : {}, \
+											\nPool-Windows : {}".format \
+											(self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows) )
+
+
+	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+		print("Nm of classes : ", class_count)
+		req_type = type(np.array([]))
+		assert type(x_train) == req_type and type(x_test) == req_type
+		assert type(y_train) == req_type and type(y_test) == req_type
+
+		from keras.models import Model
+		from keras.layers import Input, Dense, Dropout, Flatten, Reshape, MaxPooling1D, Convolution1D, Embedding
+		from keras.layers.merge import Concatenate
+		from keras.optimizers import Adam, Adagrad, Adadelta
+		from keras.regularizers import l2
+
+		input_shape = (sequence_length,)
+		model_input = Input(shape=input_shape)
+		print("Input tensor shape: ", int_shape(model_input))
+		model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
+		print("Embeddings tensor shape: ", int_shape(model_embedding))
+		conv_blocks = []
+		for i in range(len(self.filter_sizes)):
+			conv = Convolution1D(filters=self.filter_counts[i],
+								 kernel_size=self.filter_sizes[i],
+								 padding="valid",
+								 activation="relu",
+								 use_bias=False,
+								 strides=1)(model_embedding)
+			conv = MaxPooling1D(pool_size=sequence_length-self.filter_sizes[i])(conv)
+			print("Pool shape: ", int_shape(conv))
+			conv = Flatten()(conv)
+			conv_blocks.append(conv)
+		model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
+
+		model_hidden = Dropout(0.5)(model_conv)
+		model_output = Dense(class_count, activation="softmax", kernel_regularizer=l2(0.1), bias_regularizer=l2(0.1))(model_hidden)
+
+		model = Model(model_input, model_output)
+		optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+		# model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+		model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+
+		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		  validation_split=0.2, verbose=2, shuffle=True)
+
+		score, acc = model.evaluate(x_test, y_test,
+							batch_size=self.batch_size)
+		print('\nTest score:', score)
+		print('Test accuracy:', acc, '\n')
+
+
+		test_model(model, x_test, y_test)
+
+		return 0
+
+
+
+
+class Stacked_BiLSTM_Classifier:
+
+	def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
+		self.output_size = output_size
+		self.batch_size = batch_size
+		self.num_epochs = num_epochs
+		self.learning_rate = learning_rate
+		print("Using BiDirectional-RNN with parameters : \nBatch-size : {},  \
+											\nLearning-Rate : {},  \
+											\nNeurons : {}".format \
+											(self.batch_size, self.learning_rate, self.output_size) )
+
+
+	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+		req_type = type(np.array([]))
+		assert type(x_train) == req_type and type(x_test) == req_type
+		assert type(y_train) == req_type and type(y_test) == req_type
+
+		from keras.models import Model
+		from keras.layers import Input, Dense, Dropout, Flatten, Embedding, LSTM, Bidirectional, LSTMCell, StackedRNNCells, RNN
+		from keras.layers.merge import Concatenate
+		from keras.optimizers import Adam, Adagrad
+
+		input_shape = (sequence_length,)
+		model_input = Input(shape=input_shape)
+		print("Input tensor shape: ", int_shape(model_input))
+		# model_emSbedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
+		model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
+		print("Embeddings tensor shape: ", int_shape(model_embedding))
+		# model_recurrent = Bidirectional(LSTM(embeddings.shape[1], activation='relu', dropout=0.2))(model_embedding)
+		#####################################################################################################################################
+
+		cells_forward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
+		cells_backward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
+		LSTM_forward = RNN(cells_forward, go_backwards=False)(model_embedding)
+		LSTM_backward = RNN(cells_backward, go_backwards=False)(model_embedding)
+
+		model_recurrent = Concatenate(axis=-1)([LSTM_forward, LSTM_backward])
+		# model_recurrent = Bidirectional(cells_forward)(model_embedding)
+
+		######################################################################################################################################
+		model_hidden = Dropout(0.5)(model_recurrent)
+		model_output = Dense(class_count, activation="softmax")(model_hidden)
+
+		model = Model(model_input, model_output)
+		optimizer = Adam(lr=self.learning_rate)
+		# optimizer = Adagrad(lr=self.learning_rate)
+		model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+		# model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		  validation_split=0.2, verbose=2, shuffle=True)
+
+		score, acc = model.evaluate(x_test, y_test,
+							batch_size=self.batch_size)
+		print('\nTest score:', score)
+		print('Test accuracy:', acc, '\n')
+
+		test_model(model, x_test, y_test)
+
+		return 0
+
+
+
+
+
 class BDRNN_Classifier:
 
 	def __init__(self, output_size, learning_rate=0.001, batch_size=64, num_epochs=10):
