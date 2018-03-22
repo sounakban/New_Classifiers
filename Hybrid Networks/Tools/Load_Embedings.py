@@ -63,6 +63,7 @@ class Get_Embeddings:
 
 		print("Load_Embedings :: GoogleVecs")
 		print("Num of Docs : ", len(self.doc_vectors))
+		print("Num of words per Doc : ", self.maxSize)
 		print("Number of unique Words : ", self.num_of_words)
 		print("Words not found in embeddings : ", not_in_vocab)
 		print("Load_Embedings :: GoogleVecs")

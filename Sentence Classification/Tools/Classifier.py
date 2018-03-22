@@ -192,7 +192,6 @@ class CNN_Classifier:
 		input_shape = (sequence_length,)
 		model_input = Input(shape=input_shape)
 		print("Input tensor shape: ", int_shape(model_input))
-		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
 		# model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
 		model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
 		print("Embeddings tensor shape: ", int_shape(model_embedding))
@@ -220,7 +219,6 @@ class CNN_Classifier:
 		optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 		model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
 		# model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
-		# model.compile(loss="binary_crossentropy", optimizer=optimizer, metrself.ics=["accuracy"])
 
 		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
@@ -277,8 +275,10 @@ class CNN1_Classifier:
 		input_shape = (sequence_length,)
 		model_input = Input(shape=input_shape)
 		print("Input tensor shape: ", int_shape(model_input))
-		# model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
-		model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
+		print("Using randomly initialized vecs")
+		model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
+		# print("Using GloVe vecs")
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
 		print("Embeddings tensor shape: ", int_shape(model_embedding))
 		conv_blocks = []
 		for i in range(len(self.filter_sizes)):

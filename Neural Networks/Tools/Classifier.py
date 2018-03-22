@@ -30,12 +30,16 @@ def plot_AccLoss_Curve(history):
 	fig.savefig("test1.png")
 
 
-def test_model(model, X_test, Y_test):
+def test_model(model, X_test, Y_test, class_count=0):
 	from keras.utils import to_categorical
 	#Get Class of max predicted value
 	predictions = model.predict(X_test).argmax(axis=-1)
 	#Convert to binary category matrix with int type
-	predictions = np.array(to_categorical(predictions), dtype=np.int16)
+	if not class_count == 0:
+		predictions = np.array(to_categorical(predictions, num_classes=class_count), dtype=np.int16)
+	else:
+		predictions = np.array(to_categorical(predictions), dtype=np.int16)
+
 
 	from sklearn.metrics import f1_score, precision_score, recall_score
 	test_labels = Y_test
@@ -263,7 +267,7 @@ class CNN1_Classifier:
 
 
 	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
-		print("Nm of classes : ", class_count)
+		print("Num of classes : ", class_count)
 		req_type = type(np.array([]))
 		assert type(x_train) == req_type and type(x_test) == req_type
 		assert type(y_train) == req_type and type(y_test) == req_type
@@ -288,8 +292,9 @@ class CNN1_Classifier:
 								 activation="relu",
 								 use_bias=False,
 								 strides=1)(model_embedding)
+			print("Pre-Pool shape: ", int_shape(conv))
 			conv = MaxPooling1D(pool_size=sequence_length-self.filter_sizes[i])(conv)
-			print("Pool shape: ", int_shape(conv))
+			print("Post-Pool shape: ", int_shape(conv))
 			conv = Flatten()(conv)
 			conv_blocks.append(conv)
 		model_conv = Concatenate()(conv_blocks) if len(conv_blocks) > 1 else conv_blocks[0]
@@ -313,7 +318,7 @@ class CNN1_Classifier:
 		print('Test accuracy:', acc, '\n')
 
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, class_count)
 
 		return 0
 

@@ -59,11 +59,12 @@ totF1 = 0.0
 
 from sklearn.model_selection import KFold
 kf = KFold(n_splits=5)
-from Tools.Classifier import CNN_Classifier, RNN_Classifier, Nested_CNN_Classifier
+from Tools.Classifier import CNN1_Classifier, RNN_Classifier, Nested_CNN_Classifier
 
-classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=7)
+# classifier = CNN_Classifier(filter_sizes=[5,7,9], filter_counts=[500,350,250], pool_windows=[6,4,3], learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = Nested_CNN_Classifier(filter_sizes=[6,2], filter_counts=[300,150], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=7)
 # classifier = RNN_Classifier(output_size=512, learning_rate=0.001, batch_size=7, num_epochs=100)
+classifier = CNN1_Classifier(filter_sizes=[3,5,7], filter_counts=[100,100,100], pool_windows=[5,6,7], learning_rate=0.001, batch_size=50, num_epochs=41)
 
 for train_indices, test_indices in kf.split(data_vectors):
 	train_doc_vectors, train_labels = [data_vectors[i] for i in train_indices], labels[train_indices]  #[labels[i] for i in train_indices]
