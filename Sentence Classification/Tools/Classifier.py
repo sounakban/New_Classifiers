@@ -435,10 +435,17 @@ class Stacked_BiLSTM_Classifier:
 		# model_recurrent = Bidirectional(LSTM(embeddings.shape[1], activation='relu', dropout=0.2))(model_embedding)
 		#####################################################################################################################################
 
-		cells_forward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
-		cells_backward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
-		LSTM_forward = RNN(cells_forward, go_backwards=False)(model_embedding)
-		LSTM_backward = RNN(cells_backward, go_backwards=True)(model_embedding)
+		# cells_forward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
+		# cells_backward = [LSTMCell(units=self.output_size), LSTMCell(units=self.output_size), LSTMCell(units=self.output_size)]
+		cells_forward = [LSTMCell(units=self.output_size)] * 3
+		cells_backward = [LSTMCell(units=self.output_size)] * 3
+		# LSTM_forward = RNN(cells_forward, go_backwards=False)(model_embedding)
+		# LSTM_backward = RNN(cells_backward, go_backwards=True)(model_embedding)
+
+		cells_forward_stacked = StackedRNNCells(cells_forward)
+		cells_backward_stacked = StackedRNNCells(cells_backward)
+		LSTM_forward = RNN(cells_forward_stacked, go_backwards=False)(model_embedding)
+		LSTM_backward = RNN(cells_backward_stacked, go_backwards=True)(model_embedding)
 
 		model_recurrent = Concatenate(axis=-1)([LSTM_forward, LSTM_backward])
 		# model_recurrent = Bidirectional(cells_forward)(model_embedding)

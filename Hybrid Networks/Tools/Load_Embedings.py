@@ -18,48 +18,47 @@ class Get_Embeddings:
 		self.embeddings.append(list(np.random.uniform(size=300)))
 		self.num_of_words = 1	#0 is reserved for paddings
 		#Max length of a single sentence
-		self.max_wordCount = 0
-		#Max number of sentences in a single document
-		self.max_sentCount = 0
+		self.maxSize = 0
 
 
 	def googleVecs(self, corpus, selected_terms):
 
-		print("Starting vector and embeddings Generation")
-		from nltk.tokenize import RegexpTokenizer, sent_tokenize
+		from nltk.tokenize import RegexpTokenizer
 		tokenizer = RegexpTokenizer(r'\w+')
+		from nltk.stem import WordNetLemmatizer
+		wordnet_lemmatizer = WordNetLemmatizer()
+		# from nltk.corpus import stopwords
+		# stop_words = set(stopwords.words('english'))
+		stop_words = set([])
+		# if len(selected_terms) > 0:
+		# 	selected_terms = set( [wordnet_lemmatizer.lemmatize(word.lower()) for word in selected_terms] )
 
 		not_in_vocab = 0
 		for doc_num in range(len(corpus)):
+			tokens = tokenizer.tokenize(corpus[doc_num])
+			tokens = [wordnet_lemmatizer.lemmatize(word.lower()) for word in tokens if word in selected_terms and not word in stop_words]
+			tokens = [word for word in tokens if word in selected_terms]
+
 			doc_temp = []
-			for sentence in sent_tokenize(corpus[doc_num]):
-				tokens = tokenizer.tokenize(sentence)
-				tokens = [word for word in tokens if word in selected_terms]
+			for word in tokens:
+				if word in self.embedding_vocab:
+					doc_temp.append(self.embedding_vocab.index(word))
 
-				sent_temp = []
-				for word in tokens:
-					if word in self.embedding_vocab:
-						sent_temp.append(self.embedding_vocab.index(word))
+				elif word in self.google_vecs.vocab:
+					doc_temp.append(self.num_of_words)
+					self.embedding_vocab.append(word)
+					self.embeddings.append(list(self.google_vecs[word]))
+					self.num_of_words += 1
 
-					elif word in self.google_vecs.vocab:
-						sent_temp.append(self.num_of_words)
-						self.embedding_vocab.append(word)
-						self.embeddings.append(list(self.google_vecs[word]))
-						self.num_of_words += 1
+				else:
+					not_in_vocab += 1
+					doc_temp.append(self.num_of_words)
+					self.embedding_vocab.append(word)
+					self.embeddings.append(list(np.random.uniform(size=300)))
+					self.num_of_words += 1
 
-					else:
-						not_in_vocab += 1
-						sent_temp.append(self.num_of_words)
-						self.embedding_vocab.append(word)
-						self.embeddings.append(list(np.random.uniform(size=300)))
-						self.num_of_words += 1
-
-				if len(sent_temp) > self.max_wordCount:
-					self.max_wordCount = len(sent_temp)
-				doc_temp.append(sent_temp)
-
-			if len(doc_temp) > self.max_sentCount:
-				self.max_sentCount = len(doc_temp)
+			if len(doc_temp) > self.maxSize:
+				self.maxSize = len(doc_temp)
 			self.doc_vectors.append(doc_temp)
 
 		print("Load_Embedings :: GoogleVecs")
@@ -69,6 +68,5 @@ class Get_Embeddings:
 		print("Load_Embedings :: GoogleVecs")
 
 		del self.google_vecs
-		print("Completed vector and embeddings Generation")
 
-		return (self.doc_vectors, np.array(self.embeddings), [self.max_sentCount, self.max_wordCount], self.embedding_vocab)
+		return (self.doc_vectors, np.array(self.embeddings), self.maxSize, self.embedding_vocab)

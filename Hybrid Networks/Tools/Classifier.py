@@ -5,7 +5,10 @@
 #-----------------------------------Common Functions & Imports-------------------------------------
 
 import numpy as np
-np.random.seed(123456)
+# np.random.seed(123456)
+from tensorflow import set_random_seed
+# set_random_seed(2017)
+from keras.backend import int_shape
 
 def test_model(model, X_test, Y_test):
     from keras.utils import to_categorical
@@ -131,6 +134,163 @@ class CNN_Classifier:
         test_model(model, x_test, y_test)
 
         return 0
+
+
+
+
+
+# CNN Implemented based on am implemenation on a keras blog for 20NG datasets
+# Link : https://blog.keras.io/using-pre-trained-word-embeddings-in-a-keras-model.html
+class KerasBlog_CNN_Classifier:
+
+	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+		assert len(filter_sizes) == len(filter_counts)
+		assert len(filter_sizes) == len(pool_windows)
+		self.filter_sizes = filter_sizes
+		self.filter_counts = filter_counts
+		self.batch_size = batch_size
+		self.num_epochs = num_epochs
+		self.pool_windows = pool_windows
+		self.learning_rate = learning_rate
+		print("Using Nested CNN with parameters : \nBatch-size : {},  \
+											\nFilter-Sizes : {},  \
+											\nFilter-Counts : {}, \
+											\nPool-Windows : {}".format \
+											(self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows) )
+
+
+	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+		print("Nm of classes : ", class_count)
+		req_type = type(np.array([]))
+		assert type(x_train) == req_type and type(x_test) == req_type
+		assert type(y_train) == req_type and type(y_test) == req_type
+
+		from keras.models import Model
+		from keras.layers import Input, Dense, Dropout, Flatten, Reshape, MaxPooling1D, Convolution1D, Embedding
+		from keras.layers.merge import Concatenate
+		from keras.optimizers import Adam, Adagrad
+
+		input_shape = (sequence_length,)
+		model_input = Input(shape=input_shape)
+		print("Input tensor shape: ", int_shape(model_input))
+		# model_embedding = Embedding(embeddings.shape[0], 300, input_length=sequence_length, name="embedding")(model_input)
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
+		model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
+		print("Embeddings tensor shape: ", int_shape(model_embedding))
+		# model_embedding = Dropout(0.4)(model_embedding)
+
+		conv = model_embedding
+		for i in range(len(self.filter_sizes)):
+			conv = Convolution1D(filters=self.filter_counts[i],
+								 kernel_size=self.filter_sizes[i],
+								 padding="valid",
+								 activation="relu",
+								 use_bias=False,
+								 strides=1)(conv)
+			print("Convolution shape at loop ", i, " : ", int_shape(conv))
+			# conv = MaxPooling1D(pool_size=self.pool_windows[i], strides=int(int_shape(conv)[-2]/self.pool_windows[i]))(conv)
+			# conv = MaxPooling1D(pool_size=self.pool_windows[i], strides=self.pool_windows[i])(conv)
+			conv = MaxPooling1D(5)(conv)
+			print("Max-Pool shape at loop ", i, " : ", int_shape(conv))
+		model_conv = Flatten()(conv)
+
+		model_hidden = Dropout(0.5)(model_conv)
+		model_output = Dense(class_count, activation="softmax")(model_hidden)
+
+		model = Model(model_input, model_output)
+		# optimizer = Adagrad(lr=self.learning_rate)
+		optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+		model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+		# model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+		# model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+
+		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		  validation_split=0.2, verbose=2, shuffle=True)
+
+		test_model(model, x_test, y_test)
+
+		return 0
+
+
+
+
+
+
+
+class Nested_CNN_Classifier:
+
+	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+		assert len(filter_sizes) == len(filter_counts)
+		assert len(filter_sizes) == len(pool_windows)
+		self.filter_sizes = filter_sizes
+		self.filter_counts = filter_counts
+		self.batch_size = batch_size
+		self.num_epochs = num_epochs
+		self.pool_windows = pool_windows
+		self.learning_rate = learning_rate
+		print("Using Nested CNN with parameters : \nBatch-size : {},  \
+											\nFilter-Sizes : {},  \
+											\nFilter-Counts : {}, \
+											\nPool-Windows : {}".format \
+											(self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows) )
+
+
+	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
+		print("Nm of classes : ", class_count)
+		req_type = type(np.array([]))
+		assert type(x_train) == req_type and type(x_test) == req_type
+		assert type(y_train) == req_type and type(y_test) == req_type
+
+		from keras.models import Model
+		from keras.layers import Input, Dense, Dropout, Flatten, Reshape, MaxPooling1D, Convolution1D, Embedding
+		from keras.layers.merge import Concatenate
+		from keras.optimizers import Adam, Adagrad
+
+		input_shape = (sequence_length,)
+		model_input = Input(shape=input_shape)
+		print("Input tensor shape: ", int_shape(model_input))
+		model_embedding = Embedding(embeddings.shape[0], 32, input_length=sequence_length, name="embedding")(model_input)
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
+		print("Embeddings tensor shape: ", int_shape(model_embedding))
+		# model_embedding = Dropout(0.4)(model_embedding)
+
+		conv = model_embedding
+		for i in range(len(self.filter_sizes)):
+			conv = Convolution1D(filters=self.filter_counts[i],
+								 kernel_size=self.filter_sizes[i],
+								 padding="valid",
+								 activation="relu",
+								 use_bias=False,
+								 strides=1)(conv)
+			print("Convolution shape at loop ", i, " : ", int_shape(conv))
+			# conv = MaxPooling1D(pool_size=self.pool_windows[i], strides=int(int_shape(conv)[-2]/self.pool_windows[i]))(conv)
+			conv = MaxPooling1D(pool_size=self.pool_windows[i], strides=self.pool_windows[i])(conv)
+			print("Max-Pool shape at loop ", i, " : ", int_shape(conv))
+		model_conv = Flatten()(conv)
+
+		model_hidden = Dropout(0.5)(model_conv)
+		model_output = Dense(class_count, activation="softmax")(model_hidden)
+
+		model = Model(model_input, model_output)
+		# optimizer = Adagrad(lr=self.learning_rate)
+		optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+		model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+		# model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+		# model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
+
+		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		  validation_split=0.2, verbose=2, shuffle=True)
+
+		test_model(model, x_test, y_test)
+
+		return 0
 
 
 
