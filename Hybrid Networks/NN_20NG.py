@@ -20,6 +20,7 @@ def get_Embeddings(train_docs=[], test_docs=[], selected_terms = set()):
 		doc_vectors, embeddings, maxSize, embedding_vocab = embeddingGenerator.googleVecs(all_docs, selected_terms)
 		del embeddingGenerator
 		from keras.preprocessing.sequence import pad_sequences
+		maxSize = 1000
 		doc_vectors = pad_sequences(doc_vectors, maxlen=maxSize, padding='post', value=0.)
 		train_doc_vectors = doc_vectors[:len(train_docs)]
 		test_doc_vectors = doc_vectors[len(train_docs):]
@@ -57,7 +58,7 @@ test_labels = lb.transform(test_labels)
 from Tools import Utils
 train_docs, test_docs = Utils.preprocess(train_docs, test_docs)
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(train_docs, train_labels, feature_count = 10000)
+selected_terms = chisqure(train_docs, train_labels, feature_count = 5000)
 # print(len(train_docs), " ; ", len(test_docs))
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs, selected_terms)
 
@@ -69,7 +70,7 @@ from Tools.Classifier import CNN_Classifier, RNN_Classifier, KerasBlog_CNN_Class
 
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5,5], filter_counts=[64,64,64], pool_windows=[2,2,2], learning_rate=0.001, batch_size=64, num_epochs=30)
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5,5], filter_counts=[400,400,400], pool_windows=[5,5,5], learning_rate=0.001, batch_size=128, num_epochs=50)
 
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 

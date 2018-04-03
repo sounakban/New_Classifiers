@@ -15,12 +15,13 @@ def test_model(model, X_test, Y_test):
     #Get Class of max predicted value
     predictions = model.predict(X_test).argmax(axis=-1)
     #Convert to binary category matrix with int type
-    predictions = np.array(to_categorical(predictions), dtype=np.int16)
+    predictions = np.array(to_categorical(predictions, num_classes=Y_test.shape[1]), dtype=np.int16)
 
     from sklearn.metrics import f1_score, precision_score, recall_score
     test_labels = Y_test
 
     #MICRO
+    print("Shape of \n1.test_labels : ", test_labels.shape, "\n2.predictions : ", predictions.shape)
     precision = precision_score(test_labels, predictions, average='micro')
     recall = recall_score(test_labels, predictions, average='micro')
     f1 = f1_score(test_labels, predictions, average='micro')
@@ -91,8 +92,8 @@ class CNN_Classifier:
         input_shape = (sequence_length,)
         model_input = Input(shape=input_shape)
         print("Input tensor shape: ", model_input.get_shape)
-        # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
-        model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
+        model_embedding = Embedding(embeddings.shape[0], 100, input_length=sequence_length, name="embedding")(model_input)
+        # model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding")(model_input)
         print("Embeddings tensor shape: ", model_embedding.get_shape)
         # model_embedding = Dropout(0.4)(model_embedding)
         conv_blocks = []
@@ -143,7 +144,7 @@ class CNN_Classifier:
 # Link : https://blog.keras.io/using-pre-trained-word-embeddings-in-a-keras-model.html
 class KerasBlog_CNN_Classifier:
 
-	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.0001, batch_size=64, num_epochs=10):
 		assert len(filter_sizes) == len(filter_counts)
 		assert len(filter_sizes) == len(pool_windows)
 		self.filter_sizes = filter_sizes
@@ -155,8 +156,9 @@ class KerasBlog_CNN_Classifier:
 		print("Using Nested CNN with parameters : \nBatch-size : {},  \
 											\nFilter-Sizes : {},  \
 											\nFilter-Counts : {}, \
+											\nLearning Rate : {}, \
 											\nPool-Windows : {}".format \
-											(self.batch_size, self.filter_sizes, self.filter_counts, self.pool_windows) )
+											(self.batch_size, self.filter_sizes, self.filter_counts, self.learning_rate, self.pool_windows) )
 
 
 	def predict(self, x_train, y_train, x_test, y_test, embeddings, sequence_length, class_count):
@@ -208,7 +210,7 @@ class KerasBlog_CNN_Classifier:
 		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
 
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-		  validation_split=0.2, verbose=2, shuffle=True)
+		  validation_split=0.1, verbose=2, shuffle=True)
 
 		test_model(model, x_test, y_test)
 

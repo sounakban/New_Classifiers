@@ -105,7 +105,7 @@ from Tools.Classifier import HNN_RR_Classifier, HNN_CR_Classifier, HNN_RC_Classi
 # classifier = HNN_RR_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
 # classifier = HNN_CR_Classifier(RNN_output_size=256, filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=7, num_epochs=100)
 # classifier = HNN_RC_Classifier(RNN_output_size=256, filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[128,128], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=30)
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[200,200], pool_windows=[2,2], learning_rate=0.001, batch_size=128, num_epochs=40)
 
 # new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize[0], maxSize[1], train_labels.shape[1])
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
