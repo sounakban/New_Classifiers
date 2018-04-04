@@ -196,8 +196,10 @@ class KerasBlog_CNN_Classifier:
 			print("Max-Pool shape at loop ", i, " : ", int_shape(conv))
 		model_conv = Flatten()(conv)
 
-		model_hidden = Dropout(0.5)(model_conv)
-		model_output = Dense(class_count, activation="softmax")(model_hidden)
+		model_hidden = Dropout(0.8)(model_conv)
+		model_output = Dense(class_count, activation="softmax",
+                        kernel_regularizer=regularizers.l2(0.01),
+                        activity_regularizer=regularizers.l1(0.01))(model_hidden)
 
 		model = Model(model_input, model_output)
 		# optimizer = Adagrad(lr=self.learning_rate)
@@ -206,11 +208,11 @@ class KerasBlog_CNN_Classifier:
 		# model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 		# model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
-		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-		#   validation_data=(x_test, y_test), verbose=2, shuffle=True)
-
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-		  validation_split=0.1, verbose=2, shuffle=True)
+		  validation_data=(x_test, y_test), verbose=2, shuffle=True)
+
+        # model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
+		#   validation_split=0.1, verbose=2, shuffle=True)
 
 		test_model(model, x_test, y_test)
 
@@ -224,7 +226,7 @@ class KerasBlog_CNN_Classifier:
 
 class Nested_CNN_Classifier:
 
-	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=10):
+	def __init__(self, filter_sizes=[], filter_counts=[], pool_windows=[], learning_rate=0.001, batch_size=64, num_epochs=15):
 		assert len(filter_sizes) == len(filter_counts)
 		assert len(filter_sizes) == len(pool_windows)
 		self.filter_sizes = filter_sizes
