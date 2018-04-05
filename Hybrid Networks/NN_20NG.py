@@ -58,7 +58,7 @@ test_labels = lb.transform(test_labels)
 from Tools import Utils
 train_docs, test_docs = Utils.preprocess(train_docs, test_docs)
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(train_docs, train_labels, feature_count = 2500)
+selected_terms = chisqure(train_docs, train_labels, feature_count = 5000)
 # print(len(train_docs), " ; ", len(test_docs))
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs, selected_terms)
 

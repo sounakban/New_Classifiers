@@ -317,7 +317,9 @@ filter_sizes=[5,5]
 filter_counts=[200,200]
 learning_rate=0.001
 batch_size=64
-num_epochs=30
+num_epochs=10
+Dropout=0.8
+l1(0.01) & l2(0.01) regularization
 
 RESULTS:
 Label dimention :  (5735, 10)
@@ -325,12 +327,12 @@ Starting data Preprocessing
 Completed data Preprocessing
 Load_Embedings :: GoogleVecs
 Num of Docs :  7980
-Num of words per Doc :  595
-Number of unique Words :  10910
-Words not found in embeddings :  3072
+Num of words per Doc :  262
+Number of unique Words :  501
+Words not found in embeddings :  69
 Load_Embedings :: GoogleVecs
 Using TensorFlow backend.
-Embeddings Shape :  (10910, 300)
+Embeddings Shape :  (501, 300)
 Using Nested CNN with parameters : 
 Batch-size : 128,  								
 Filter-Sizes : [5, 5],  							
@@ -338,60 +340,61 @@ Filter-Counts : [200, 200],
 Learning Rate : 0.001, 								
 Pool-Windows : [2, 2]
 Nm of classes :  10
-Input tensor shape:  (None, 595)
-2018-04-04 11:17:06.543878: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
-2018-04-04 11:17:06.543934: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
-2018-04-04 11:17:06.543953: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
-Embeddings tensor shape:  (None, 595, 300)
-Convolution shape at loop  0  :  (None, 591, 200)
-Max-Pool shape at loop  0  :  (None, 118, 200)
-Convolution shape at loop  1  :  (None, 114, 200)
-Max-Pool shape at loop  1  :  (None, 22, 200)
+Input tensor shape:  (None, 262)
+2018-04-04 12:26:16.122653: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-04 12:26:16.122738: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-04 12:26:16.122766: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+Embeddings tensor shape:  (None, 262, 300)
+Convolution shape at loop  0  :  (None, 258, 200)
+Max-Pool shape at loop  0  :  (None, 51, 200)
+Convolution shape at loop  1  :  (None, 47, 200)
+Max-Pool shape at loop  1  :  (None, 9, 200)
 Train on 5735 samples, validate on 2245 samples
-Epoch 1/14
- - 43s - loss: 1.5543 - acc: 0.4956 - val_loss: 1.0869 - val_acc: 0.6788
-Epoch 2/14
- - 43s - loss: 0.9721 - acc: 0.7079 - val_loss: 0.6561 - val_acc: 0.7906
-Epoch 3/14
- - 42s - loss: 0.5477 - acc: 0.8213 - val_loss: 0.3820 - val_acc: 0.8780
-Epoch 4/14
- - 42s - loss: 0.3086 - acc: 0.8952 - val_loss: 0.2807 - val_acc: 0.9185
-Epoch 5/14
- - 49s - loss: 0.1921 - acc: 0.9379 - val_loss: 0.2339 - val_acc: 0.9296
-Epoch 6/14
- - 43s - loss: 0.1185 - acc: 0.9648 - val_loss: 0.2328 - val_acc: 0.9292
-Epoch 7/14
- - 43s - loss: 0.0728 - acc: 0.9805 - val_loss: 0.2209 - val_acc: 0.9323
-Epoch 8/14
- - 43s - loss: 0.0443 - acc: 0.9876 - val_loss: 0.2173 - val_acc: 0.9425
-Epoch 9/14
- - 44s - loss: 0.0404 - acc: 0.9874 - val_loss: 0.2382 - val_acc: 0.9390
-Epoch 10/14
- - 47s - loss: 0.0290 - acc: 0.9930 - val_loss: 0.2439 - val_acc: 0.9425
-Epoch 11/14
- - 43s - loss: 0.0234 - acc: 0.9937 - val_loss: 0.2272 - val_acc: 0.9434
-Epoch 12/14
- - 42s - loss: 0.0152 - acc: 0.9967 - val_loss: 0.2012 - val_acc: 0.9479
-Epoch 13/14
- - 43s - loss: 0.0099 - acc: 0.9970 - val_loss: 0.2234 - val_acc: 0.9465
-Epoch 14/14
- - 50s - loss: 0.0111 - acc: 0.9969 - val_loss: 0.2174 - val_acc: 0.9519
+Epoch 1/15
+ - 17s - loss: 2.8819 - acc: 0.5226 - val_loss: 2.2022 - val_acc: 0.7751
+Epoch 2/15
+ - 16s - loss: 2.1802 - acc: 0.7519 - val_loss: 1.9009 - val_acc: 0.8347
+Epoch 3/15
+ - 17s - loss: 1.9580 - acc: 0.8099 - val_loss: 1.7355 - val_acc: 0.8820
+Epoch 4/15
+ - 17s - loss: 1.8130 - acc: 0.8521 - val_loss: 1.6366 - val_acc: 0.9105
+Epoch 5/15
+ - 17s - loss: 1.6907 - acc: 0.8884 - val_loss: 1.5582 - val_acc: 0.9269
+Epoch 6/15
+ - 16s - loss: 1.6148 - acc: 0.9137 - val_loss: 1.5268 - val_acc: 0.9394
+Epoch 7/15
+ - 17s - loss: 1.5551 - acc: 0.9289 - val_loss: 1.5162 - val_acc: 0.9448
+Epoch 8/15
+ - 16s - loss: 1.5198 - acc: 0.9458 - val_loss: 1.4793 - val_acc: 0.9510
+Epoch 9/15
+ - 17s - loss: 1.4875 - acc: 0.9522 - val_loss: 1.4701 - val_acc: 0.9590
+Epoch 10/15
+ - 17s - loss: 1.4607 - acc: 0.9594 - val_loss: 1.4587 - val_acc: 0.9612
+Epoch 11/15
+ - 19s - loss: 1.4441 - acc: 0.9622 - val_loss: 1.4722 - val_acc: 0.9563
+Epoch 12/15
+ - 20s - loss: 1.4221 - acc: 0.9705 - val_loss: 1.4498 - val_acc: 0.9653
+Epoch 13/15
+ - 17s - loss: 1.4170 - acc: 0.9700 - val_loss: 1.4711 - val_acc: 0.9604
+Epoch 14/15
+ - 16s - loss: 1.4052 - acc: 0.9726 - val_loss: 1.4541 - val_acc: 0.9635
+Epoch 15/15
+ - 16s - loss: 1.3872 - acc: 0.9801 - val_loss: 1.4493 - val_acc: 0.9657
 Shape of 
 1.test_labels :  (2245, 10) 
 2.predictions :  (2245, 10)
 Micro-average quality numbers
-Precision: 0.9519, Recall: 0.9519, F1-measure: 0.9519
+Precision: 0.9657, Recall: 0.9657, F1-measure: 0.9657
 Macro-average quality numbers
-Precision: 0.8339, Recall: 0.8579, F1-measure: 0.8430
+Precision: 0.9204, Recall: 0.9265, F1-measure: 0.9232
 All-Class quality numbers
 Precision: 
-[ 0.97536232  0.75        0.99065421  0.98431734  0.89552239  0.82022472
-  0.75757576  0.56756757  0.74193548  0.85542169], 
+[ 0.98115942  0.95454545  0.95689655  0.98795181  0.83544304  0.81395349
+  0.92857143  0.89473684  0.96        0.8902439 ], 
 Recall: 
-[ 0.96834532  0.81818182  0.8907563   0.99163569  0.74074074  0.83908046
-  0.89285714  0.58333333  0.92        0.93421053], 
+[ 0.97410072  0.95454545  0.93277311  0.99070632  0.81481481  0.8045977
+  0.92857143  0.94444444  0.96        0.96052632], 
 F1-measure: 
-[ 0.97184116  0.7826087   0.9380531   0.98796296  0.81081081  0.82954545
-  0.81967213  0.57534247  0.82142857  0.89308176]
-
+[ 0.97761733  0.95454545  0.94468085  0.98932715  0.825       0.80924855
+  0.92857143  0.91891892  0.96        0.92405063]
 

@@ -71,10 +71,10 @@ def getDocIDs_90():
 
 #-------------------------------------------Prepare Data-------------------------------------------
 
-dataset = "Top10"
-train_docs_id, test_docs_id = getDocIDs_top10()
-# dataset = "All90"
-# train_docs_id, test_docs_id = getDocIDs_90()
+# dataset = "Top10"
+# train_docs_id, test_docs_id = getDocIDs_top10()
+dataset = "All90"
+train_docs_id, test_docs_id = getDocIDs_90()
 
 train_docs = [reuters.raw(doc_id) for doc_id in train_docs_id]
 test_docs = [reuters.raw(doc_id) for doc_id in test_docs_id]
@@ -101,14 +101,15 @@ train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_
 
 from Tools.Classifier import HNN_RR_Classifier, HNN_CR_Classifier, HNN_RC_Classifier, KerasBlog_CNN_Classifier
 
-# classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=50)
-# classifier = HNN_RR_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-# classifier = HNN_CR_Classifier(RNN_output_size=256, filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=7, num_epochs=100)
 # classifier = HNN_RC_Classifier(RNN_output_size=256, filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[200,200], pool_windows=[2,2], learning_rate=0.001, batch_size=128, num_epochs=10)
-
 # new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize[0], maxSize[1], train_labels.shape[1])
-new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
+
+
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[300,300], pool_windows=[2,2], learning_rate=0.001, batch_size=128, num_epochs=17)
+# Multi-class Clasification
+# new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
+# Multi-label Clasification
+new = classifier.predict_multilabel(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
 
 # #-------------------------------------------Evaluation-------------------------------------------
