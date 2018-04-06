@@ -312,6 +312,8 @@ F1-measure:
 
 #########################################################################################
 Reuters 21578
+
+## Multiclass ##
 KerasBlog_CNN_Classifier
 filter_sizes=[5,5]
 filter_counts=[200,200]
@@ -397,4 +399,134 @@ Recall:
 F1-measure: 
 [ 0.97761733  0.95454545  0.94468085  0.98932715  0.825       0.80924855
   0.92857143  0.91891892  0.96        0.92405063]
+  
+  
+  
+  
+  
+  
+  
+  
+## Multi-label ##
+Label dimention :  (7722, 90)
+Starting data Preprocessing
+Completed data Preprocessing
+Load_Embedings :: GoogleVecs
+Num of Docs :  10727
+Num of words per Doc :  312
+Number of unique Words :  501
+Words not found in embeddings :  82
+Load_Embedings :: GoogleVecs
+Using TensorFlow backend.
+Embeddings Shape :  (501, 300)
+Using Nested CNN with parameters : 
+Batch-size : 128,  								
+Filter-Sizes : [5, 5],  							
+Filter-Counts : [300, 300], 							
+Learning Rate : 0.001, 								
+Pool-Windows : [2, 2]
+Nm of classes :  90
+Input tensor shape:  (None, 312)
+2018-04-05 15:56:42.658726: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:56:42.658801: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:56:42.658818: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+Embeddings tensor shape:  (None, 312, 300)
+Convolution shape at loop  0  :  (None, 308, 300)
+Max-Pool shape at loop  0  :  (None, 61, 300)
+Convolution shape at loop  1  :  (None, 57, 300)
+Max-Pool shape at loop  1  :  (None, 11, 300)
+Train on 7722 samples, validate on 3005 samples
+Epoch 1/17
+ - 46s - loss: 0.0866 - acc: 0.9721 - val_loss: 0.0410 - val_acc: 0.9896
+Epoch 2/17
+ - 45s - loss: 0.0440 - acc: 0.9893 - val_loss: 0.0380 - val_acc: 0.9913
+Epoch 3/17
+ - 51s - loss: 0.0399 - acc: 0.9902 - val_loss: 0.0360 - val_acc: 0.9916
+Epoch 4/17
+ - 45s - loss: 0.0363 - acc: 0.9909 - val_loss: 0.0315 - val_acc: 0.9923
+Epoch 5/17
+ - 45s - loss: 0.0328 - acc: 0.9916 - val_loss: 0.0289 - val_acc: 0.9929
+Epoch 6/17
+ - 45s - loss: 0.0314 - acc: 0.9919 - val_loss: 0.0278 - val_acc: 0.9932
+Epoch 7/17
+ - 45s - loss: 0.0293 - acc: 0.9923 - val_loss: 0.0280 - val_acc: 0.9931
+Epoch 8/17
+ - 51s - loss: 0.0281 - acc: 0.9925 - val_loss: 0.0273 - val_acc: 0.9933
+Epoch 9/17
+ - 44s - loss: 0.0272 - acc: 0.9928 - val_loss: 0.0254 - val_acc: 0.9936
+Epoch 10/17
+ - 45s - loss: 0.0262 - acc: 0.9930 - val_loss: 0.0251 - val_acc: 0.9936
+Epoch 11/17
+ - 45s - loss: 0.0255 - acc: 0.9931 - val_loss: 0.0247 - val_acc: 0.9938
+Epoch 12/17
+ - 46s - loss: 0.0248 - acc: 0.9931 - val_loss: 0.0248 - val_acc: 0.9936
+Epoch 13/17
+ - 51s - loss: 0.0239 - acc: 0.9934 - val_loss: 0.0245 - val_acc: 0.9937
+Epoch 14/17
+ - 46s - loss: 0.0234 - acc: 0.9935 - val_loss: 0.0234 - val_acc: 0.9941
+Epoch 15/17
+ - 46s - loss: 0.0227 - acc: 0.9936 - val_loss: 0.0238 - val_acc: 0.9939
+Epoch 16/17
+ - 46s - loss: 0.0221 - acc: 0.9938 - val_loss: 0.0233 - val_acc: 0.9941
+Epoch 17/17
+ - 46s - loss: 0.0218 - acc: 0.9938 - val_loss: 0.0229 - val_acc: 0.9941
+Type of predictions <class 'numpy.ndarray'>
+Shape of 
+1.test_labels :  (3005, 90) 
+2.predictions :  (3005, 90)
+Micro-average quality numbers
+Precision: 0.9018, Recall: 0.6453, F1-measure: 0.7523
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Macro-average quality numbers
+Precision: 0.2269, Recall: 0.1106, F1-measure: 0.1306
+All-Class quality numbers
+Precision: 
+[ 0.87119114  0.          0.25        0.625       0.          0.          0.
+  0.          0.          0.96        0.          0.          0.74358974
+  0.          0.          1.          0.          0.85082873  0.
+  0.77777778  0.          0.96792453  0.          0.          0.88235294
+  0.          0.96899225  0.          0.          0.          0.          0.
+  0.          0.          0.86206897  0.          0.          0.          0.
+  0.          0.          0.          0.          0.          0.          0.
+  0.74666667  0.85714286  0.          0.          0.          0.          0.
+  0.          0.66666667  0.          0.          1.          0.          0.
+  0.          0.          0.          0.          0.          0.          0.
+  0.          0.          0.          0.          0.9375      0.          1.
+  0.          0.          0.75        0.          0.          0.          0.
+  1.          0.          0.          0.81372549  1.          0.89090909
+  0.          1.          0.        ], 
+Recall: 
+[ 0.87604457  0.          0.07142857  0.16666667  0.          0.          0.
+  0.          0.          0.85714286  0.          0.          0.51785714
+  0.          0.          0.03571429  0.          0.82795699  0.
+  0.31818182  0.          0.95        0.          0.          0.42857143
+  0.          0.84459459  0.          0.          0.          0.          0.
+  0.          0.          0.57251908  0.          0.          0.          0.
+  0.          0.          0.          0.          0.          0.          0.
+  0.62569832  0.17647059  0.          0.          0.          0.          0.
+  0.          0.04255319  0.          0.          0.2         0.          0.
+  0.          0.          0.          0.          0.          0.          0.
+  0.          0.          0.          0.          0.51724138  0.          0.1
+  0.          0.          0.09090909  0.          0.          0.          0.
+  0.2         0.          0.          0.71551724  0.05405405  0.69014085
+  0.          0.07142857  0.        ], 
+F1-measure: 
+[ 0.87361111  0.          0.11111111  0.26315789  0.          0.          0.
+  0.          0.          0.90566038  0.          0.          0.61052632
+  0.          0.          0.06896552  0.          0.83923706  0.          0.4516129
+  0.          0.9588785   0.          0.          0.57692308  0.
+  0.90252708  0.          0.          0.          0.          0.          0.
+  0.          0.68807339  0.          0.          0.          0.          0.
+  0.          0.          0.          0.          0.          0.
+  0.68085106  0.29268293  0.          0.          0.          0.          0.
+  0.          0.08        0.          0.          0.33333333  0.          0.
+  0.          0.          0.          0.          0.          0.          0.
+  0.          0.          0.          0.          0.66666667  0.
+  0.18181818  0.          0.          0.16216216  0.          0.          0.
+  0.          0.33333333  0.          0.          0.76146789  0.1025641
+  0.77777778  0.          0.13333333  0.        ]
+
 
