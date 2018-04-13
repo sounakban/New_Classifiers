@@ -96,7 +96,7 @@ from Tools.Classifier import CNN_Classifier, RNN_Classifier, KerasBlog_CNN_Class
 
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5,5], filter_counts=[200,200,200], pool_windows=[5,5,5], learning_rate=0.001, batch_size=128, num_epochs=12)
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[400,400], pool_windows=[5,5], learning_rate=0.001, batch_size=128, num_epochs=20)
 
 new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
 
