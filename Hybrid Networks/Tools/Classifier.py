@@ -175,7 +175,6 @@ class KerasBlog_CNN_Classifier:
 		optimizer = Adam(lr=self.learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 		model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
 		# model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
-		# model.compile(loss="binary_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_data=(x_test, y_test), verbose=2, shuffle=True)

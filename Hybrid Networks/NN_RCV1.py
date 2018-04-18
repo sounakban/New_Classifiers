@@ -86,7 +86,7 @@ test_labels = np.array([sklearn_labelMatrix[i] for i in sklearn_testIndices])
 
 ## Process Dataset ##
 from Tools.Feature_Extraction import chisqure
-selected_terms = chisqure(train_docs, train_labels, feature_count = 5000)
+selected_terms = chisqure(train_docs, train_labels, feature_count = 2500)
 train_doc_vectors, test_doc_vectors, embeddings, maxSize, embedding_vocab = get_Embeddings(train_docs, test_docs, selected_terms)
 
 
@@ -96,60 +96,9 @@ from Tools.Classifier import CNN_Classifier, RNN_Classifier, KerasBlog_CNN_Class
 
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[400,400], pool_windows=[5,5], learning_rate=0.001, batch_size=128, num_epochs=20)
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[500,500], pool_windows=[2,2], learning_rate=0.001, batch_size=64, num_epochs=40)
 
-new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
-
-
-
-# #-------------------------- Evaluation ----------------------
-# precision = precision_score(test_labels, predictions, average='micro')
-# recall = recall_score(test_labels, predictions, average='micro')
-# f1 = f1_score(test_labels, predictions, average='micro')
-#
-# print("Micro-average quality numbers")
-# print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}".format(precision, recall, f1))
-#
-# precision = precision_score(test_labels, predictions, average='macro')
-# recall = recall_score(test_labels, predictions, average='macro')
-# f1 = f1_score(test_labels, predictions, average='macro')
-#
-# print("Macro-average quality numbers")
-# print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}".format(precision, recall, f1))
-#
-#
-# #print [len(numpy.nonzero(train_labels[:, i])[0].tolist()) for i in range(num_labels)]
-# #print [len(numpy.nonzero(test_labels[:, i])[0].tolist()) for i in range(num_labels)]
-# precision = precision_score(test_labels, predictions, average=None)
-# recall = recall_score(test_labels, predictions, average=None)
-# f1 = f1_score(test_labels, predictions, average=None)
-# print f1
-#
-# print "Evaluation complete and it took : ", print_time(start_time)
-#
-#
-# import numpy as np
-# exp_train = np.sum(train_labels, axis=0)
-# exp_test = np.sum(test_labels, axis=0)
-# print "Num of train docs per category:\n", exp_train
-# print "Num of test docs per category:\n", exp_test
-#
-# #Export to Spreadsheet
-# import xlsxwriter
-#
-# export = np.column_stack((exp_train, exp_test, f1, precision, recall))
-# workbook = xlsxwriter.Workbook('classscores.xlsx')
-# worksheet = workbook.add_worksheet()
-# worksheet.write(0, 0, "Train(Count)")
-# worksheet.write(0, 1, "Test(Count)")
-# worksheet.write(0, 2, "F1")
-# worksheet.write(0, 3, "Precision")
-# worksheet.write(0, 4, "Recall")
-# for (x,y), value in np.ndenumerate(export):
-#     worksheet.write(x+1, y, value)
-# workbook.close()
-#
-#
-#
-#
-# print "Total time taken : ", (time.time() - program_start)/60.0, "minuites"
+# Multi-class Clasification
+# new = classifier.predict(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
+# Multi-label Clasification
+new = classifier.predict_multilabel(np.array(train_doc_vectors), train_labels, np.array(test_doc_vectors), test_labels, embeddings, maxSize, train_labels.shape[1])
