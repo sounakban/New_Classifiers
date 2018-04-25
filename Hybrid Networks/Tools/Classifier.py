@@ -10,7 +10,7 @@ from tensorflow import set_random_seed
 # set_random_seed(2017)
 from keras.backend import int_shape
 
-def test_model(model, X_test, Y_test):
+def test_model(model, X_test, Y_test, Y_train):
 	from keras.utils import to_categorical
 	#Get Class of max predicted value
 	predictions = model.predict(X_test).argmax(axis=-1)
@@ -57,7 +57,30 @@ def test_model(model, X_test, Y_test):
 	#         .format(totprec/10, totrec/10, totF1/10))
 
 
-def test_model_multilabel(model, X_test, Y_test):
+	import numpy as np
+	exp_train = np.sum(Y_train, axis=0)
+	exp_test = np.sum(Y_test, axis=0)
+	print "Num of train docs per category:\n", exp_train
+	print "Num of test docs per category:\n", exp_test
+
+
+	#Export to Spreadsheet
+	import xlsxwriter
+
+	export = np.column_stack((exp_train, exp_test, f1, precision, recall))
+	workbook = xlsxwriter.Workbook('classscores.xlsx')
+	worksheet = workbook.add_worksheet()
+	worksheet.write(0, 0, "Train(Count)")
+	worksheet.write(0, 1, "Test(Count)")
+	worksheet.write(0, 2, "F1")
+	worksheet.write(0, 3, "Precision")
+	worksheet.write(0, 4, "Recall")
+	for (x,y), value in np.ndenumerate(export):
+	    worksheet.write(x+1, y, value)
+	workbook.close()
+
+
+def test_model_multilabel(model, X_test, Y_test, Y_train):
 	predictions = model.predict(X_test)
 	# Convert to binary based on probability
 	predictions[predictions>=0.5] = 1
@@ -102,6 +125,28 @@ def test_model_multilabel(model, X_test, Y_test):
 	# print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
 	#         .format(totprec/10, totrec/10, totF1/10))
 
+
+	import numpy as np
+	exp_train = np.sum(Y_train, axis=0)
+	exp_test = np.sum(Y_test, axis=0)
+	print "Num of train docs per category:\n", exp_train
+	print "Num of test docs per category:\n", exp_test
+
+
+	#Export to Spreadsheet
+	import xlsxwriter
+
+	export = np.column_stack((exp_train, exp_test, f1, precision, recall))
+	workbook = xlsxwriter.Workbook('classscores.xlsx')
+	worksheet = workbook.add_worksheet()
+	worksheet.write(0, 0, "Train(Count)")
+	worksheet.write(0, 1, "Test(Count)")
+	worksheet.write(0, 2, "F1")
+	worksheet.write(0, 3, "Precision")
+	worksheet.write(0, 4, "Recall")
+	for (x,y), value in np.ndenumerate(export):
+	    worksheet.write(x+1, y, value)
+	workbook.close()
 
 
 
@@ -182,7 +227,7 @@ class KerasBlog_CNN_Classifier:
 		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		#   validation_split=0.1, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -241,7 +286,7 @@ class KerasBlog_CNN_Classifier:
 		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		#   validation_split=0.1, verbose=2, shuffle=True)
 
-		test_model_multilabel(model, x_test, y_test)
+		test_model_multilabel(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -326,7 +371,7 @@ class CNN_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -401,7 +446,7 @@ class Nested_CNN_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -458,7 +503,7 @@ class RNN_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -522,7 +567,7 @@ class HNN_RR_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -606,7 +651,7 @@ class HNN_CR_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
 
@@ -690,6 +735,6 @@ class HNN_RC_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, x_test, y_test, y_train)
 
 		return 0
