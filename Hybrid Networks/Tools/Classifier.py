@@ -60,8 +60,8 @@ def test_model(model, X_test, Y_test, Y_train):
 	import numpy as np
 	exp_train = np.sum(Y_train, axis=0)
 	exp_test = np.sum(Y_test, axis=0)
-	print "Num of train docs per category:\n", exp_train
-	print "Num of test docs per category:\n", exp_test
+	print("Num of train docs per category:\n", exp_train)
+	print("Num of test docs per category:\n", exp_test)
 
 
 	#Export to Spreadsheet
@@ -129,8 +129,8 @@ def test_model_multilabel(model, X_test, Y_test, Y_train):
 	import numpy as np
 	exp_train = np.sum(Y_train, axis=0)
 	exp_test = np.sum(Y_test, axis=0)
-	print "Num of train docs per category:\n", exp_train
-	print "Num of test docs per category:\n", exp_test
+	print("Num of train docs per category:\n", exp_train)
+	print("Num of test docs per category:\n", exp_test)
 
 
 	#Export to Spreadsheet
