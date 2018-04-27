@@ -188,9 +188,9 @@ class KerasBlog_CNN_Classifier:
 		input_shape = (sequence_length,)
 		model_input = Input(shape=input_shape)
 		print("Input tensor shape: ", int_shape(model_input))
-		# model_embedding = Embedding(embeddings.shape[0], 300, input_length=sequence_length, name="embedding")(model_input)
+		model_embedding = Embedding(embeddings.shape[0], 300, input_length=sequence_length, name="embedding")(model_input)
 		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], input_length=sequence_length, name="embedding")(model_input)
-		model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
+		# model_embedding = Embedding(embeddings.shape[0], embeddings.shape[1], weights=[embeddings], name="embedding", trainable=True)(model_input)
 		print("Embeddings tensor shape: ", int_shape(model_embedding))
 		# model_embedding = Dropout(0.4)(model_embedding)
 
