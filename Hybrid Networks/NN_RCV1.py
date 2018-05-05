@@ -148,7 +148,7 @@ from Tools.Classifier import CNN_Classifier, RNN_Classifier, KerasBlog_CNN_Class
 
 # classifier = CNN_Classifier(filter_sizes=[3,7], filter_counts=[150,300], pool_windows=[6,21], learning_rate=0.001, batch_size=32, num_epochs=100)
 # classifier = RNN_Classifier(output_size=256, learning_rate=0.001, batch_size=7, num_epochs=100)
-classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[800,800], pool_windows=[2,2], learning_rate=0.001, batch_size=128, num_epochs=50)
+classifier = KerasBlog_CNN_Classifier(filter_sizes=[5,5], filter_counts=[600,600], pool_windows=[2,2], learning_rate=0.001, batch_size=128, num_epochs=15)
 print("50 epochs with random initialization of embeddings.")
 
 # Multi-class Clasification

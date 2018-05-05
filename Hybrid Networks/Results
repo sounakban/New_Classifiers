@@ -530,3 +530,177 @@ F1-measure:
   0.77777778  0.          0.13333333  0.        ]
 
 
+
+
+#########################################################################################
+RCV-1
+  
+  
+  Num of train Docs:  23149
+Num of test Docs:  199328
+Load_Embedings :: GoogleVecs
+Num of Docs :  222477
+Num of words per Doc :  488
+Number of unique Words :  4912
+Words not found in embeddings :  217
+Load_Embedings :: GoogleVecs
+Using TensorFlow backend.
+Embeddings Shape :  (4912, 300)
+Using Nested CNN with parameters : 
+Batch-size : 128,  								
+Filter-Sizes : [5, 5],  							
+Filter-Counts : [400, 400], 							
+Learning Rate : 0.001, 								
+Pool-Windows : [2, 2]
+50 epochs with random initialization of embeddings.
+Nm of classes :  103
+Input tensor shape:  (None, 488)
+2018-05-05 00:12:41.815385: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-05-05 00:12:41.815439: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-05-05 00:12:41.815455: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+Embeddings tensor shape:  (None, 488, 300)
+Convolution shape at loop  0  :  (None, 484, 400)
+Max-Pool shape at loop  0  :  (None, 96, 400)
+Convolution shape at loop  1  :  (None, 92, 400)
+Max-Pool shape at loop  1  :  (None, 18, 400)
+Train on 23149 samples, validate on 199328 samples
+Epoch 1/15
+ - 571s - loss: 0.1140 - acc: 0.9665 - val_loss: 0.0969 - val_acc: 0.9715
+Epoch 2/15
+ - 571s - loss: 0.0951 - acc: 0.9720 - val_loss: 0.1016 - val_acc: 0.9731
+Epoch 3/15
+ - 571s - loss: 0.0862 - acc: 0.9745 - val_loss: 0.0870 - val_acc: 0.9746
+Epoch 4/15
+ - 570s - loss: 0.0812 - acc: 0.9757 - val_loss: 0.0777 - val_acc: 0.9764
+Epoch 5/15
+ - 571s - loss: 0.0765 - acc: 0.9767 - val_loss: 0.0753 - val_acc: 0.9769
+Epoch 6/15
+ - 570s - loss: 0.0716 - acc: 0.9777 - val_loss: 0.0721 - val_acc: 0.9778
+Epoch 7/15
+ - 572s - loss: 0.0679 - acc: 0.9786 - val_loss: 0.0720 - val_acc: 0.9779
+Epoch 8/15
+ - 571s - loss: 0.0650 - acc: 0.9792 - val_loss: 0.0711 - val_acc: 0.9784
+Epoch 9/15
+ - 571s - loss: 0.0624 - acc: 0.9798 - val_loss: 0.0698 - val_acc: 0.9787
+Epoch 10/15
+ - 571s - loss: 0.0605 - acc: 0.9804 - val_loss: 0.0720 - val_acc: 0.9786
+Epoch 11/15
+ - 572s - loss: 0.0583 - acc: 0.9809 - val_loss: 0.0729 - val_acc: 0.9790
+Epoch 12/15
+ - 571s - loss: 0.0567 - acc: 0.9813 - val_loss: 0.0714 - val_acc: 0.9791
+Epoch 13/15
+ - 572s - loss: 0.0550 - acc: 0.9819 - val_loss: 0.0730 - val_acc: 0.9791
+Epoch 14/15
+ - 572s - loss: 0.0536 - acc: 0.9821 - val_loss: 0.0731 - val_acc: 0.9793
+Epoch 15/15
+ - 571s - loss: 0.0521 - acc: 0.9827 - val_loss: 0.0726 - val_acc: 0.9795
+Shape of 
+1.test_labels :  (199328, 103) 
+2.predictions :  (199328, 103)
+Micro-average quality numbers
+Precision: 0.8264, Recall: 0.4402, F1-measure: 0.5744
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1137: UndefinedMetricWarning: Recall is ill-defined and being set to 0.0 in labels with no true samples.
+  'recall', 'true', average, warn_for)
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+/home/sounak/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1137: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no true samples.
+  'recall', 'true', average, warn_for)
+Macro-average quality numbers
+Precision: 0.3416, Recall: 0.1111, F1-measure: 0.1435
+All-Class quality numbers
+Precision: 
+[ 0.32258065  0.61538462  0.40909091  0.          0.90027149  0.80717185
+  0.          0.75559176  0.          0.75        0.72727273  0.          0.
+  0.          0.69693593  0.68862571  0.          0.          0.5786802   0.
+  0.          0.55913978  0.33766234  0.          0.5         0.          0.
+  0.          0.          0.          0.          0.          0.84300899
+  0.83730461  1.          0.45052632  0.          0.          0.          0.
+  0.          0.          0.          0.          0.87526728  0.75659229
+  0.97590361  0.          0.          0.          0.          0.81138211
+  0.          0.79355783  0.          0.79074447  0.          0.
+  0.75366569  0.68424852  0.45454545  0.          0.          0.          0.4084507
+  0.          0.          0.          0.          0.          0.88886577
+  0.66375698  0.64        0.68551069  0.77906977  0.          0.          0.
+  0.25        0.84354092  0.          0.          0.          0.65745779
+  0.          0.          0.          0.94368463  0.          0.7019475
+  0.76356589  0.87058824  0.          0.85624608  0.64233577  0.73369257
+  0.68747783  0.66209262  0.88611168  0.83018598  0.38515901  0.8804458
+  0.85374924], 
+Recall: 
+[  1.63505559e-03   3.92156863e-02   9.48866632e-04   0.00000000e+00
+   6.31843703e-01   5.20607060e-01   0.00000000e+00   2.61428864e-01
+   0.00000000e+00   2.61802950e-04   1.61714170e-03   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   2.89672738e-01   2.62016523e-01
+   0.00000000e+00   0.00000000e+00   1.59641507e-02   0.00000000e+00
+   0.00000000e+00   1.27811233e-02   2.47336377e-03   0.00000000e+00
+   5.60224090e-04   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   3.33225598e-01   8.39935525e-01   2.77649236e-03   3.25871783e-02
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   1.13630055e-01   1.01524224e-01   1.11785813e-02   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   3.50914205e-01
+   0.00000000e+00   9.57766390e-02   0.00000000e+00   1.13946071e-01
+   0.00000000e+00   0.00000000e+00   1.85559567e-01   4.99901108e-01
+   3.51926799e-03   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   1.30044843e-02   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   7.74939815e-01   2.51322052e-01
+   7.16204118e-03   1.44748721e-01   2.97910182e-02   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   6.37755102e-04   3.75572869e-01
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   3.16879623e-01
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   7.10564575e-01
+   0.00000000e+00   2.92141431e-01   1.89833775e-01   8.35214447e-02
+   0.00000000e+00   5.01839588e-01   6.47892509e-02   4.28346717e-01
+   3.01399689e-01   6.50708024e-02   6.55945767e-01   5.42235096e-01
+   3.98829126e-02   1.66347626e-01   7.61461084e-01], 
+F1-measure: 
+[  3.25361965e-03   7.37327189e-02   1.89334175e-03   0.00000000e+00
+   7.42543218e-01   6.32965867e-01   0.00000000e+00   3.88455241e-01
+   0.00000000e+00   5.23423188e-04   3.22710770e-03   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   4.09247042e-01   3.79598776e-01
+   0.00000000e+00   0.00000000e+00   3.10711365e-02   0.00000000e+00
+   0.00000000e+00   2.49909888e-02   4.91075645e-03   0.00000000e+00
+   1.11919418e-03   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   4.77646514e-01   8.38618006e-01   5.53760960e-03   6.07781880e-02
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   2.01146601e-01   1.79025678e-01   2.21039705e-02   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   4.89936181e-01
+   0.00000000e+00   1.70923999e-01   0.00000000e+00   1.99189052e-01
+   0.00000000e+00   0.00000000e+00   2.97798378e-01   5.77725290e-01
+   6.98445958e-03   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   2.52064320e-02   0.00000000e+00   0.00000000e+00   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   8.28002361e-01   3.64595320e-01
+   1.41655600e-02   2.39026006e-01   5.73875803e-02   0.00000000e+00
+   0.00000000e+00   0.00000000e+00   1.27226463e-03   5.19739971e-01
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   4.27644416e-01
+   0.00000000e+00   0.00000000e+00   0.00000000e+00   8.10698735e-01
+   0.00000000e+00   4.12574652e-01   3.04071001e-01   1.52420185e-01
+   0.00000000e+00   6.32799814e-01   1.17706069e-01   5.40902201e-01
+   4.19072332e-01   1.18495779e-01   7.53851561e-01   6.56002713e-01
+   7.22811671e-02   2.79826115e-01   8.04968629e-01]
+Num of train docs per category:
+ [  674   381   947   160  4179  2366   399  1930    49  1172   437   285
+    76   246  1462  1205   142   202   793   190    62   922  1058   166
+   196    41    43   443    31   120   312   286   343 10786   279   679
+    94   187   167    17    65    12     8    34  1255   407   853    66
+    43     0     3   449    40   641   102   400    54    15   166  3449
+   363    49    35    59   138    38     2    45    52     2  6970  1133
+   233  1004   293   106   172     6   197   471     0    13    90  1647
+   166    92    37   913    23  1115   346   135    51  1294   732  1596
+   943   699  2541  1508   311   606  5882]
+Num of test docs per category:
+ [ 6116  2652  9485  1946 39361 20624  2013 19512   438 11459  4947  2818
+   623  1942 12956 10652  1131  1871  7141  1723   665  8137 10512  1085
+  1785   238   464  3846   305  1178  2719  2480  3094 98023  2161  6567
+   564  1669  1425   243   552    84    55   318 10807  3674  7246   591
+   423    12    25  4266   510  5659   830  3449   491    98  1385 30336
+  5683   958   594   625  2230   579    75   535  1140    19 60646  7564
+  2234  9969  2249   987  1480    77  1568  4364     0   168   602 14870
+  1487   721   542  8254   194  8513  4151   886   438 10872  5433 12079
+  6430  5932 19619 10702  2733  5224 45829]
+
+
