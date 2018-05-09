@@ -281,7 +281,7 @@ class KerasBlog_CNN_Classifier:
 		model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
-		  validation_data=(x_test, y_test), verbose=2, shuffle=True)
+		  validation_data=(x_test[:500], y_test[:500]), verbose=2, shuffle=True)
 
 		# model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		#   validation_split=0.1, verbose=2, shuffle=True)
