@@ -52,12 +52,7 @@ def test_model(model, X_test, Y_test, Y_train):
 	print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
 			.format(precision, recall, f1))
 
-	# print "K-fold Micro average:"
-	# print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
-	#         .format(totprec/10, totrec/10, totF1/10))
-
-
-	import numpy as np
+	#import numpy as np
 	exp_train = np.sum(Y_train, axis=0)
 	exp_test = np.sum(Y_test, axis=0)
 	print("Num of train docs per category:\n", exp_train)

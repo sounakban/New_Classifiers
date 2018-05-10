@@ -30,7 +30,7 @@ def plot_AccLoss_Curve(history):
 	fig.savefig("test1.png")
 
 
-def test_model(model, X_test, Y_test, class_count=0):
+def test_model(model, Y_train, X_test, Y_test, class_count=0):
 	from keras.utils import to_categorical
 	#Get Class of max predicted value
 	predictions = model.predict(X_test).argmax(axis=-1)
@@ -45,6 +45,7 @@ def test_model(model, X_test, Y_test, class_count=0):
 	test_labels = Y_test
 
 	#MICRO
+	print("Shape of \n1.test_labels : ", test_labels.shape, "\n2.predictions : ", predictions.shape)
 	precision = precision_score(test_labels, predictions, average='micro')
 	recall = recall_score(test_labels, predictions, average='micro')
 	f1 = f1_score(test_labels, predictions, average='micro')
@@ -78,6 +79,28 @@ def test_model(model, X_test, Y_test, class_count=0):
 	# print "K-fold Micro average:"
 	# print("Precision: \n{}, \nRecall: \n{}, \nF1-measure: \n{}"
 	#         .format(totprec/10, totrec/10, totF1/10))
+
+	#import numpy as np
+	exp_train = np.sum(Y_train, axis=0)
+	exp_test = np.sum(Y_test, axis=0)
+	print("Num of train docs per category:\n", exp_train)
+	print("Num of test docs per category:\n", exp_test)
+
+
+	#Export to Spreadsheet
+	import xlsxwriter
+
+	export = np.column_stack((exp_train, exp_test, f1, precision, recall))
+	workbook = xlsxwriter.Workbook('classscores.xlsx')
+	worksheet = workbook.add_worksheet()
+	worksheet.write(0, 0, "Train(Count)")
+	worksheet.write(0, 1, "Test(Count)")
+	worksheet.write(0, 2, "F1")
+	worksheet.write(0, 3, "Precision")
+	worksheet.write(0, 4, "Recall")
+	for (x,y), value in np.ndenumerate(export):
+	    worksheet.write(x+1, y, value)
+	workbook.close()
 
 
 
@@ -153,7 +176,7 @@ class Nested_CNN_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
 
@@ -237,7 +260,7 @@ class CNN_Classifier:
 		print('Test score:', score)
 		print('Test accuracy:', acc)
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
 
@@ -318,7 +341,7 @@ class CNN1_Classifier:
 		print('Test accuracy:', acc, '\n')
 
 
-		test_model(model, x_test, y_test, class_count)
+		test_model(model, y_train, x_test, y_test, class_count)
 
 		return 0
 
@@ -400,7 +423,7 @@ class CNN2_Classifier:
 		print('Test accuracy:', acc, '\n')
 
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
 
@@ -469,7 +492,7 @@ class Stacked_BiLSTM_Classifier:
 		print('\nTest score:', score)
 		print('Test accuracy:', acc, '\n')
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
 
@@ -530,7 +553,7 @@ class BDRNN_Classifier:
 		model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.num_epochs,
 		  validation_split=0.2, verbose=2, shuffle=True)
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
 
@@ -593,6 +616,6 @@ class RNN_Classifier:
 		  validation_split=0.2, verbose=2, shuffle=True)
 		plot_AccLoss_Curve(history)
 
-		test_model(model, x_test, y_test)
+		test_model(model, y_train, x_test, y_test)
 
 		return 0
