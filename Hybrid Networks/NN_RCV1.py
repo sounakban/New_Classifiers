@@ -45,8 +45,8 @@ from Tools.getRCV1 import getRCV1
 from Tools.getRCV1V2 import getRCV1V2
 RCV1Path = "/home/sounak/Resources/Data/rcv1_train_test/Data/"
 RCV1V2Path = "/home/sounak/Resources/Data/RCV1-V2/Raw Data/"
-rcv1_data = getRCV1(RCV1Path, RCV1V2Path, testset=4)
-rcv1v2_data = getRCV1V2(RCV1V2Path, testset=4)
+rcv1_data = getRCV1(RCV1Path, RCV1V2Path, testset=3)
+rcv1v2_data = getRCV1V2(RCV1V2Path, testset=3)
 
 
 train_docs_index = range(rcv1_data.getTrainDocCount())
