@@ -78,6 +78,7 @@ train_labels = mlb.fit_transform([reuters.categories(doc_id) for doc_id in train
 test_labels = mlb.transform([reuters.categories(doc_id) for doc_id in test_docs_id])
 
 print train_labels.shape
+print test_labels.shape
 
 #Create label complement matrix
 train_labels_complement = numpy.zeros(shape=train_labels.shape);    train_labels_complement.fill(1)
@@ -183,7 +184,7 @@ for i in range(num_labels):
 #----------------Classification--------------------------
 
 classifier = CopulaClassifier(corcoeff, vocab_choice, priors)
-predictions = classifier.predict_multilabelBR(test_docs)
+predictions = classifier.predict_multiclass(test_docs)
 
 print("The Classification is complete and it took", print_time(start_time))
 #print "Avg time taken per doc: ", (print_time(start_time)/float(len(test_docs)))
